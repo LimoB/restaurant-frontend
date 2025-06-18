@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Sidebar from "./Sidebar";
+// import Sidebar from "./Sidebar";
 import { toast, Toaster } from "react-hot-toast";
 
 interface User {
@@ -201,7 +201,7 @@ function ManageUsers() {
 
     return (
         <div className="flex min-h-screen bg-gray-100">
-            <Sidebar />
+            {/* <Sidebar /> */}
             <Toaster position="top-right" />
             <main className="flex-1 p-8">
                 <div className="flex justify-between items-center mb-6">
