@@ -9,6 +9,7 @@ function RegisterPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    contact_phone: "", // ✅ Added
     password: "",
     confirmPassword: "",
     user_type: "member",
@@ -54,6 +55,7 @@ function RegisterPage() {
       await registerUser({
         name: formData.name,
         email: formData.email,
+        contact_phone: formData.contact_phone, // ✅ Included in API call
         password: formData.password,
         user_type: formData.user_type,
       });
@@ -90,11 +92,7 @@ function RegisterPage() {
         </h2>
 
         {message && (
-          <p
-            className={`text-sm mb-4 ${
-              isError ? "text-red-500" : "text-green-600"
-            }`}
-          >
+          <p className={`text-sm mb-4 ${isError ? "text-red-500" : "text-green-600"}`}>
             {message}
           </p>
         )}
@@ -106,17 +104,22 @@ function RegisterPage() {
               placeholder="Full Name"
               className="input mb-3"
               value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />
             <input
               type="email"
               placeholder="Email"
               className="input mb-3"
               value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="Phone Number"
+              className="input mb-3"
+              value={formData.contact_phone}
               onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
+                setFormData({ ...formData, contact_phone: e.target.value })
               }
             />
 
@@ -127,9 +130,7 @@ function RegisterPage() {
                 placeholder="Password"
                 className="input w-full pr-10"
                 value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               />
               <button
                 type="button"
@@ -175,9 +176,7 @@ function RegisterPage() {
             <select
               className="input mb-4"
               value={formData.user_type}
-              onChange={(e) =>
-                setFormData({ ...formData, user_type: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, user_type: e.target.value })}
             >
               <option value="member">Customer</option>
               <option value="owner">Restaurant Owner</option>
