@@ -206,6 +206,10 @@ function RegisterPage() {
               </Link>
             </p>
           </>
+
+
+
+
         ) : (
           <>
             <p className="text-sm text-gray-600">
