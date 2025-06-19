@@ -7,18 +7,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#ea580c",   // 🍊 Rich orange (calls to action)
-        secondary: "#1f2937", // 🖤 Dark gray (headers/nav)
-        accent: "#f59e0b",    // 🌽 Amber (highlights)
-
-        // 🍽️ Additional food-inspired colors
-        cream: "#fff7ed",     // ☁️ Backgrounds
-        chocolate: "#7b341e", // 🍫 Dark brown (borders)
-        lemon: "#fde047",     // 🍋 Bright yellow (badges)
-        grape: "#7c3aed",     // 🍇 Purple for contrast
-        mint: "#10b981",      // 🌿 Success green
-        tomato: "#ef4444",    // 🍅 Error red
-        butter: "#fcd34d",    // 🧈 Form backgrounds
+        primary: "#ea580c",   // Orange brand color
+        secondary: "#1f2937", // Dark gray
+        accent: "#f59e0b",    // Amber
       },
       fontFamily: {
         sans: ["Inter", "ui-sans-serif", "system-ui"],
@@ -28,5 +19,23 @@ export default {
       },
     },
   },
-  plugins: [],
-};
+  plugins: [require("daisyui")],
+  daisyui: {
+    themes: [
+      {
+        gourmettheme: {
+          primary: "#ea580c",
+          secondary: "#1f2937",
+          accent: "#f59e0b",
+          neutral: "#3D4451",
+          "base-100": "#ffffff",
+          info: "#3ABFF8",
+          success: "#36D399",
+          warning: "#FBBD23",
+          error: "#F87272",
+        },
+      },
+    ],
+    darkTheme: "gourmettheme",
+  },
+}

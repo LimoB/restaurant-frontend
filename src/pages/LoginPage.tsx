@@ -11,7 +11,6 @@ function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Load email from localStorage on mount
   useEffect(() => {
     const savedEmail = localStorage.getItem("rememberedEmail");
     if (savedEmail) {
@@ -29,12 +28,9 @@ function LoginPage() {
       localStorage.setItem("token", userData.token);
       localStorage.setItem("user", JSON.stringify(userData));
 
-      // Handle remember me
-      if (rememberMe) {
-        localStorage.setItem("rememberedEmail", formData.email);
-      } else {
-        localStorage.removeItem("rememberedEmail");
-      }
+      rememberMe
+        ? localStorage.setItem("rememberedEmail", formData.email)
+        : localStorage.removeItem("rememberedEmail");
 
       switch (userData.user_type) {
         case "member":
@@ -53,67 +49,88 @@ function LoginPage() {
           navigate("/menu");
       }
     } catch (err: any) {
-      setError(err.response?.data?.error || "Login failed.");
+      setError(err.response?.data?.error || "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login to Your Account</h2>
+    <div className="min-h-screen flex items-center justify-center bg-base-200 px-4">
+      <div className="w-full max-w-md bg-base-100 shadow-2xl rounded-2xl p-8 space-y-6">
+        <h2 className="text-3xl font-bold text-center text-white">Welcome Back</h2>
+        <p className="text-sm text-center text-gray-400">
+          Enter your credentials to access your account
+        </p>
 
-        {error && <p className="text-sm text-red-500 mb-4 text-center">{error}</p>}
+        {error && (
+          <div className="text-sm text-red-400 bg-red-900/30 border border-red-500 rounded-lg p-3">
+            {error}
+          </div>
+        )}
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="input mb-3"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        />
+        {/* Email */}
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-300">Email</label>
+          <input
+            type="email"
+            placeholder="you@example.com"
+            className="w-full input input-bordered bg-base-200 text-white"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          />
+        </div>
 
-        <div className="relative mb-3">
+        {/* Password */}
+        <div className="space-y-1 relative">
+          <label className="text-sm font-medium text-gray-300">Password</label>
           <input
             type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            className="input w-full pr-10"
+            placeholder="••••••••"
+            className="w-full input input-bordered bg-base-200 text-white pr-10"
             value={formData.password}
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
           <button
             type="button"
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
             onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-9 text-gray-400"
+            aria-label="Toggle password visibility"
           >
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
         </div>
 
-        <div className="flex items-center justify-between mb-4">
-          <label className="flex items-center text-sm">
+        {/* Remember Me / Forgot */}
+        <div className="flex justify-between items-center text-sm text-gray-400">
+          <label className="flex items-center gap-2">
             <input
               type="checkbox"
               checked={rememberMe}
               onChange={() => setRememberMe(!rememberMe)}
-              className="mr-2"
+              className="checkbox checkbox-sm"
             />
             Remember me
           </label>
-          <Link to="/request-reset" className="text-sm text-blue-600 hover:underline">
+          <Link to="/request-reset" className="text-blue-400 hover:underline">
             Forgot password?
           </Link>
         </div>
 
-        <button onClick={handleLogin} className="btn w-full mb-4" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
+        {/* Login Button */}
+        <button
+          onClick={handleLogin}
+          disabled={loading}
+          className="btn btn-primary w-full"
+        >
+          {loading ? <span className="loading loading-spinner" /> : "Login"}
         </button>
 
-        <p className="text-sm text-center">
+        {/* Register */}
+        <p className="text-center text-sm text-gray-400">
           Don’t have an account?{" "}
-          <Link to="/register" className="text-blue-600 hover:underline">
-            Register
+          <Link to="/register" className="text-blue-400 font-medium hover:underline">
+            Register here
           </Link>
         </p>
       </div>

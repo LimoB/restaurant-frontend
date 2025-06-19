@@ -9,7 +9,7 @@ function RegisterPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    contact_phone: "", // ✅ Added
+    contact_phone: "",
     password: "",
     confirmPassword: "",
     user_type: "member",
@@ -55,7 +55,7 @@ function RegisterPage() {
       await registerUser({
         name: formData.name,
         email: formData.email,
-        contact_phone: formData.contact_phone, // ✅ Included in API call
+        contact_phone: formData.contact_phone,
         password: formData.password,
         user_type: formData.user_type,
       });
@@ -85,74 +85,82 @@ function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">
+    <div className="min-h-screen bg-base-200 flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-base-100 p-8 rounded-2xl shadow-2xl space-y-6">
+        <h2 className="text-3xl font-bold text-primary text-center">
           {step === "form" ? "Create Your Account" : "Verify Your Email"}
         </h2>
 
         {message && (
-          <p className={`text-sm mb-4 ${isError ? "text-red-500" : "text-green-600"}`}>
-            {message}
-          </p>
+          <div className={`alert ${isError ? "alert-error" : "alert-success"}`}>
+            <span>{message}</span>
+          </div>
         )}
 
         {step === "form" ? (
           <>
-            <input
-              type="text"
-              placeholder="Full Name"
-              className="input mb-3"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              className="input mb-3"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            />
-            <input
-              type="text"
-              placeholder="Phone Number"
-              className="input mb-3"
-              value={formData.contact_phone}
-              onChange={(e) =>
-                setFormData({ ...formData, contact_phone: e.target.value })
-              }
-            />
+            <div className="form-control">
+              <input
+                type="text"
+                placeholder="Full Name"
+                className="input input-bordered"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
+            </div>
 
-            {/* Password field */}
-            <div className="relative mb-1">
+            <div className="form-control">
+              <input
+                type="email"
+                placeholder="Email"
+                className="input input-bordered"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              />
+            </div>
+
+            <div className="form-control">
+              <input
+                type="text"
+                placeholder="Phone Number"
+                className="input input-bordered"
+                value={formData.contact_phone}
+                onChange={(e) =>
+                  setFormData({ ...formData, contact_phone: e.target.value })
+                }
+              />
+            </div>
+
+            {/* Password */}
+            <div className="form-control relative">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                className="input w-full pr-10"
+                className="input input-bordered pr-10"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               />
               <button
                 type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
                 onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-3 text-gray-500"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
 
             {formData.password && (
-              <p className={`text-sm mb-3 ${passwordStrength.className}`}>
+              <p className={`text-sm ${passwordStrength.className}`}>
                 Strength: {passwordStrength.label}
               </p>
             )}
 
             {/* Confirm Password */}
-            <div className="relative mb-3">
+            <div className="form-control relative">
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirm Password"
-                className="input w-full pr-10"
+                className="input input-bordered pr-10"
                 value={formData.confirmPassword}
                 onChange={(e) =>
                   setFormData({ ...formData, confirmPassword: e.target.value })
@@ -160,62 +168,65 @@ function RegisterPage() {
               />
               <button
                 type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-3 text-gray-500"
               >
                 {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
 
             {!passwordsMatch && formData.confirmPassword && (
-              <p className="text-sm text-red-500 mb-2">
-                ❌ Passwords do not match
-              </p>
+              <p className="text-sm text-red-500">❌ Passwords do not match</p>
             )}
 
-            <select
-              className="input mb-4"
-              value={formData.user_type}
-              onChange={(e) => setFormData({ ...formData, user_type: e.target.value })}
-            >
-              <option value="member">Customer</option>
-              <option value="owner">Restaurant Owner</option>
-              <option value="driver">Driver</option>
-            </select>
+            <div className="form-control">
+              <select
+                className="select select-bordered"
+                value={formData.user_type}
+                onChange={(e) => setFormData({ ...formData, user_type: e.target.value })}
+              >
+                <option value="member">Customer</option>
+                <option value="owner">Restaurant Owner</option>
+                <option value="driver">Driver</option>
+              </select>
+            </div>
 
             <button
+              className="btn btn-primary w-full"
               onClick={handleRegister}
-              className="btn w-full mb-4"
               disabled={loading}
             >
-              {loading ? "Registering..." : "Register"}
+              {loading ? <span className="loading loading-spinner" /> : "Register"}
             </button>
 
-            <p className="text-sm text-center">
+            <p className="text-center text-sm">
               Already have an account?{" "}
-              <Link to="/login" className="text-blue-600 hover:underline">
+              <Link to="/login" className="link link-secondary">
                 Log in
               </Link>
             </p>
           </>
         ) : (
           <>
-            <p className="mb-2 text-sm text-gray-600">
+            <p className="text-sm text-gray-600">
               Enter the 6-digit code sent to your email.
             </p>
-            <input
-              type="text"
-              placeholder="123456"
-              className="input mb-4"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-            />
+            <div className="form-control">
+              <input
+                type="text"
+                placeholder="123456"
+                className="input input-bordered"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+              />
+            </div>
+
             <button
               onClick={handleVerify}
-              className="btn w-full"
+              className="btn btn-primary w-full"
               disabled={loading}
             >
-              {loading ? "Verifying..." : "Verify Email"}
+              {loading ? <span className="loading loading-spinner" /> : "Verify Email"}
             </button>
           </>
         )}
