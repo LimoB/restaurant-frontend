@@ -2,9 +2,9 @@ import { Route } from "react-router-dom";
 import RequireRole from "../components/RequireRole";
 import AdminLayout from "../admin/AdminLayout";
 import AdminDashboard from "../admin/AdminDashboard";
-import ManageUsers from "../admin/ManageUsers";
-import ManageRestaurants from "../admin/ManageRestaurants";
-import ManageOrders from "../admin/ManageOrders";
+import ManageUsers from "../admin/ManageUsers/ManageUsers";
+import ManageRestaurants from "../admin/ManageRestaurant/ManageRestaurants";
+import ManageOrders from "../admin/ManageOrders/ManageOrders";
 import AdminSettings from "../admin/AdminSettings";
 
 export const AdminRoutes = (

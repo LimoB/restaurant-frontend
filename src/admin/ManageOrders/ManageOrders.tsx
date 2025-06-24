@@ -2,15 +2,15 @@
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import OrderCreateModal from "../components/OrderCreateModal";
+import OrderCreateModal from "../../components/OrderCreateModal";
 import {
   fetchAllOrders,
   deleteOrder,
   updateOrder,
   fetchOrderById,
-} from "../services/orders";
-import { statusColors } from "../utils/orderStatusColors";
-import type { Order } from "../types/order";
+} from "../../services/orders";
+import { statusColors } from "../../utils/orderStatusColors";
+import type { Order } from "../../types/order";
 
 const ManageOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);

@@ -1,6 +1,19 @@
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { LogOut, User, Settings } from "lucide-react";
+import { LogOut, User, Settings, Utensils, ClipboardList, Users, Truck, MessageSquare, Layers, MapPin, Globe, Cog } from "lucide-react";
+
+const links = [
+  { label: "Orders", to: "/admin/orders", icon: <ClipboardList size={18} /> },
+  { label: "Restaurants", to: "/admin/restaurants", icon: <Utensils size={18} /> },
+  { label: "Menu Items", to: "/admin/menu", icon: <Layers size={18} /> },
+  { label: "Users", to: "/admin/users", icon: <Users size={18} /> },
+  { label: "Drivers", to: "/admin/drivers", icon: <Truck size={18} /> },
+  { label: "Comments", to: "/admin/comments", icon: <MessageSquare size={18} /> },
+  { label: "Categories", to: "/admin/categories", icon: <Layers size={18} /> },
+  { label: "States", to: "/admin/states", icon: <MapPin size={18} /> },
+  { label: "Cities", to: "/admin/cities", icon: <Globe size={18} /> },
+  { label: "Settings", to: "/admin/settings", icon: <Cog size={18} /> },
+];
 
 const AdminLayout = () => {
   const navigate = useNavigate();
@@ -14,10 +27,7 @@ const AdminLayout = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
       }
     };
@@ -26,61 +36,64 @@ const AdminLayout = () => {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-[#fffaf0] text-[#442c1c] font-sans">
+    <div className="flex min-h-screen bg-[#f9f7f4] font-sans">
       {/* Sidebar */}
-      <aside className="w-64 bg-gradient-to-b from-[#93512c] to-[#7b3e19] text-white p-6 hidden md:block shadow-lg">
-        <h2 className="text-2xl font-extrabold mb-8 tracking-wide">🍽️ Admin Panel</h2>
-        <nav className="space-y-4 text-base font-medium">
-          <Link to="/admin" className="block hover:text-yellow-300 transition">
-            Dashboard
-          </Link>
-          <Link to="/admin/users" className="block hover:text-yellow-300 transition">
-            Users
-          </Link>
-          <Link to="/admin/restaurants" className="block hover:text-yellow-300 transition">
-            Restaurants
-          </Link>
-          <Link to="/admin/orders" className="block hover:text-yellow-300 transition">
-            Orders
-          </Link>
+      <aside className="w-64 bg-white/70 backdrop-blur-lg text-[#1e1e1e] p-6 hidden md:flex flex-col gap-6 border-r border-gray-200 shadow-sm">
+        <h2 className="text-2xl font-extrabold tracking-wide mb-2">Admin Panel</h2>
+        <nav className="flex flex-col gap-1">
+          {links.map(({ label, to, icon }) => (
+            <NavLink
+              key={label}
+              to={to}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-4 py-2 rounded-xl text-sm font-medium transition ${
+                  isActive
+                    ? "bg-[#e8f0fe] text-blue-700"
+                    : "hover:bg-gray-100 text-gray-800"
+                }`
+              }
+            >
+              {icon} {label}
+            </NavLink>
+          ))}
         </nav>
       </aside>
 
       {/* Main Content */}
       <div className="flex flex-col flex-1">
         {/* Top Navbar */}
-        <header className="flex items-center justify-between px-6 py-4 bg-[#93512c] text-white shadow-md">
-          <h1 className="text-xl font-semibold tracking-wide">Admin Dashboard</h1>
+        <header className="flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur border-b border-gray-200 shadow-sm">
+          <h1 className="text-xl font-semibold tracking-wide text-[#333]">Admin Dashboard</h1>
 
           {/* Profile Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center space-x-2 hover:text-yellow-200 transition-colors"
+              className="flex items-center space-x-2 text-sm font-medium hover:text-blue-600 transition"
             >
               <User size={20} />
-              <span className="font-medium">Admin</span>
+              <span>Admin</span>
             </button>
 
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-44 bg-[#fff3e0] text-[#5b2c0f] rounded-xl shadow-xl z-50 overflow-hidden border border-[#93512c]">
-                <Link
+              <div className="absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-xl shadow-md z-50 overflow-hidden">
+                <NavLink
                   to="/admin/profile"
                   onClick={() => setDropdownOpen(false)}
-                  className="block px-4 py-2 hover:bg-[#f5e1c8] transition"
+                  className="block px-4 py-2 text-sm hover:bg-gray-100"
                 >
                   My Profile
-                </Link>
-                <Link
+                </NavLink>
+                <NavLink
                   to="/admin/settings"
                   onClick={() => setDropdownOpen(false)}
-                  className="block px-4 py-2 hover:bg-[#f5e1c8] flex items-center gap-2 transition"
+                  className="block px-4 py-2 text-sm hover:bg-gray-100 flex items-center gap-2"
                 >
                   <Settings size={16} /> Settings
-                </Link>
+                </NavLink>
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left px-4 py-2 hover:bg-[#f5e1c8] flex items-center gap-2 text-red-600 transition"
+                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center gap-2 text-red-600"
                 >
                   <LogOut size={16} /> Logout
                 </button>
@@ -90,7 +103,7 @@ const AdminLayout = () => {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-6 bg-[#fdf6eb] overflow-auto">
+        <main className="flex-1 p-6 overflow-auto bg-[#fafafa]">
           <Outlet />
         </main>
       </div>

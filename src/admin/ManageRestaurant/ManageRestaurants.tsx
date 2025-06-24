@@ -7,9 +7,9 @@ import {
   updateRestaurant,
   deleteRestaurant,
   fetchRestaurantsByCity,
-} from "../services/restaurants";
-import { fetchCities } from "../services/city";
-import Modal from "../components/Modal";
+} from "../../services/restaurants";
+import { fetchCities } from "../../services/city";
+import Modal from "../../components/Modal";
 
 // Updated interfaces with optional fields
 interface Restaurant {

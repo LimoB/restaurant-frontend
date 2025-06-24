@@ -14,13 +14,15 @@ export interface Restaurant {
   description?: string;
   created_at?: string;
   updated_at?: string;
-  // Add more fields as needed
+  owner?: { id: number; name: string };
+  address?: { city?: { id: number; name: string } };
 }
 
 export interface RestaurantInput {
   name: string;
   description?: string;
-  // Include other fields required for creation/updating
+  ownerId: number;
+  cityId: number;
 }
 
 // Fetch all restaurants

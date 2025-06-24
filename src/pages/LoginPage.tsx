@@ -23,11 +23,16 @@ function LoginPage() {
     }
   }, []);
 
+
+
   const handleLogin = async () => {
     try {
       setLoading(true);
       const res = await loginUser(formData);
       const userData = res.data;
+
+      // ✅ Store token in localStorage
+      localStorage.setItem("token", userData.token);
 
       dispatch(loginSuccess({ token: userData.token, user: userData }));
 
@@ -59,6 +64,7 @@ function LoginPage() {
       setLoading(false);
     }
   };
+
 
   return (
     <div
