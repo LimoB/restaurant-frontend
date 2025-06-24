@@ -28,7 +28,6 @@ function RegisterPage() {
     if (/[a-z]/.test(password)) strength++;
     if (/[0-9]/.test(password)) strength++;
     if (/[^A-Za-z0-9]/.test(password)) strength++;
-
     if (strength <= 2) return { label: "Weak", className: "text-red-500" };
     if (strength <= 4) return { label: "Medium", className: "text-yellow-600" };
     return { label: "Strong", className: "text-green-600" };
@@ -52,13 +51,7 @@ function RegisterPage() {
 
     try {
       setLoading(true);
-      await registerUser({
-        name: formData.name,
-        email: formData.email,
-        contact_phone: formData.contact_phone,
-        password: formData.password,
-        user_type: formData.user_type,
-      });
+      await registerUser(formData);
       setStep("verify");
       setIsError(false);
       setMessage("✅ Verification code sent to your email.");
@@ -85,103 +78,118 @@ function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-base-100 p-8 rounded-2xl shadow-2xl space-y-6">
-        <h2 className="text-3xl font-bold text-primary text-center">
+    <div
+      className="min-h-screen flex items-center justify-center bg-cover bg-center px-4"
+      style={{
+        backgroundImage:
+          'url("https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1470&q=80")',
+      }}
+    >
+      <div className="w-full max-w-md bg-white bg-opacity-80 backdrop-blur-md shadow-xl rounded-2xl p-8 space-y-6">
+        <h2 className="text-3xl font-bold text-center text-gray-800">
           {step === "form" ? "Create Your Account" : "Verify Your Email"}
         </h2>
 
         {message && (
-          <div className={`alert ${isError ? "alert-error" : "alert-success"}`}>
-            <span>{message}</span>
+          <div
+            className={`text-sm p-3 rounded border ${isError
+              ? "bg-red-100 text-red-700 border-red-300"
+              : "bg-green-100 text-green-700 border-green-300"
+              }`}
+          >
+            {message}
           </div>
         )}
 
         {step === "form" ? (
           <>
-            <div className="form-control">
+            {/* Name */}
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700">Full Name</label>
               <input
                 type="text"
-                placeholder="Full Name"
-                className="input input-bordered"
+                placeholder="John Doe"
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brown-500"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
             </div>
 
-            <div className="form-control">
+            {/* Email */}
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700">Email</label>
               <input
                 type="email"
-                placeholder="Email"
-                className="input input-bordered"
+                placeholder="you@example.com"
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brown-500"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               />
             </div>
 
-            <div className="form-control">
+            {/* Phone */}
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700">Phone Number</label>
               <input
                 type="text"
-                placeholder="Phone Number"
-                className="input input-bordered"
+                placeholder="123-456-7890"
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brown-500"
                 value={formData.contact_phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, contact_phone: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, contact_phone: e.target.value })}
               />
             </div>
 
             {/* Password */}
-            <div className="form-control relative">
+            <div className="space-y-1 relative">
+              <label className="text-sm font-medium text-gray-700">Password</label>
               <input
                 type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                className="input input-bordered pr-10"
+                placeholder="••••••••"
+                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brown-500"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3 text-gray-500"
+                className="absolute right-3 top-9 text-gray-500"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
+              {formData.password && (
+                <p className={`text-sm mt-1 ${passwordStrength.className}`}>
+                  Strength: {passwordStrength.label}
+                </p>
+              )}
             </div>
 
-            {formData.password && (
-              <p className={`text-sm ${passwordStrength.className}`}>
-                Strength: {passwordStrength.label}
-              </p>
-            )}
-
             {/* Confirm Password */}
-            <div className="form-control relative">
+            <div className="space-y-1 relative">
+              <label className="text-sm font-medium text-gray-700">Confirm Password</label>
               <input
                 type={showConfirmPassword ? "text" : "password"}
-                placeholder="Confirm Password"
-                className="input input-bordered pr-10"
+                placeholder="••••••••"
+                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brown-500"
                 value={formData.confirmPassword}
-                onChange={(e) =>
-                  setFormData({ ...formData, confirmPassword: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-3 text-gray-500"
+                className="absolute right-3 top-9 text-gray-500"
               >
                 {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
+              {!passwordsMatch && formData.confirmPassword && (
+                <p className="text-sm text-red-500 mt-1">❌ Passwords do not match</p>
+              )}
             </div>
 
-            {!passwordsMatch && formData.confirmPassword && (
-              <p className="text-sm text-red-500">❌ Passwords do not match</p>
-            )}
-
-            <div className="form-control">
+            {/* User Type */}
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700">User Type</label>
               <select
-                className="select select-bordered"
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brown-500"
                 value={formData.user_type}
                 onChange={(e) => setFormData({ ...formData, user_type: e.target.value })}
               >
@@ -191,46 +199,46 @@ function RegisterPage() {
               </select>
             </div>
 
+            {/* Register Button */}
             <button
-              className="btn btn-primary w-full"
               onClick={handleRegister}
               disabled={loading}
+              className={`w-full py-2 px-4 rounded text-white font-semibold transition-colors ${loading
+                  ? "bg-yellow-300 cursor-not-allowed"
+                  : "bg-yellow-700 hover:bg-yellow-800"
+                }`}
             >
-              {loading ? <span className="loading loading-spinner" /> : "Register"}
+              {loading ? "Registering..." : "Register"}
             </button>
 
-            <p className="text-center text-sm">
+            <p className="text-center text-sm text-gray-700">
               Already have an account?{" "}
-              <Link to="/login" className="link link-secondary">
+              <Link to="/login" className="text-yellow-800 font-medium hover:underline">
                 Log in
               </Link>
             </p>
           </>
-
-
-
-
         ) : (
           <>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-700 text-center">
               Enter the 6-digit code sent to your email.
             </p>
-            <div className="form-control">
-              <input
-                type="text"
-                placeholder="123456"
-                className="input input-bordered"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-              />
-            </div>
-
+            <input
+              type="text"
+              placeholder="123456"
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brown-500"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+            />
             <button
               onClick={handleVerify}
-              className="btn btn-primary w-full"
               disabled={loading}
+              className={`w-full py-2 px-4 rounded text-white font-semibold transition-colors ${loading
+                  ? "bg-yellow-300 cursor-not-allowed"
+                  : "bg-yellow-700 hover:bg-yellow-800"
+                }`}
             >
-              {loading ? <span className="loading loading-spinner" /> : "Verify Email"}
+              {loading ? "Verifying..." : "Verify Email"}
             </button>
           </>
         )}

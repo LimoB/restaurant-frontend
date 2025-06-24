@@ -1,49 +1,22 @@
+// src/pages/ManageOrders.tsx
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import OrderCreateModal from "../components/OrderCreateModal";
 import {
   fetchAllOrders,
   deleteOrder,
   updateOrder,
   fetchOrderById,
 } from "../services/orders";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import OrderCreateModal from "../components/OrderCreateModal";
-
-interface Order {
-  id: number;
-  status: "pending" | "accepted" | "rejected" | "delivered";
-  final_price: string;
-  price: string;
-  discount: string;
-  comment?: string;
-  actual_delivery_time?: string;
-  created_at: string;
-  updated_at?: string; // ✅ Make this optional
-  user?: { id?: number; name: string };
-  restaurant?: { id?: number; name: string };
-  driver?: { id?: number; name: string };
-  delivery_address?: {
-    id?: number;
-    city: {
-      name: string;
-      state: { name: string };
-    };
-  };
-}
-
-
-const statusColors: Record<Order["status"], string> = {
-  pending: "bg-yellow-100 text-yellow-700",
-  accepted: "bg-blue-100 text-blue-700",
-  rejected: "bg-red-100 text-red-700",
-  delivered: "bg-green-100 text-green-700",
-};
+import { statusColors } from "../utils/orderStatusColors";
+import type { Order } from "../types/order";
 
 const ManageOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [, setSelectedOrder] = useState<Order | null>(null);
 
   const loadOrders = async () => {
     try {
@@ -93,24 +66,24 @@ const ManageOrders = () => {
   }, []);
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-white shadow rounded-xl">
       <ToastContainer position="top-right" />
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Manage Orders</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-[#4a2d16]">Manage Orders</h2>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="bg-green-600 text-white px-4 py-2 rounded"
+          className="bg-[#7b3e19] hover:bg-[#5a2c13] text-white px-4 py-2 rounded shadow"
         >
           + Create Order
         </button>
       </div>
 
       {loading ? (
-        <p className="text-gray-600">Loading orders...</p>
+        <p className="text-gray-500">Loading orders...</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="min-w-full border text-sm">
-            <thead className="bg-gray-100">
+          <table className="min-w-full border text-sm bg-[#fffaf0]">
+            <thead className="bg-[#f5e1c8]">
               <tr>
                 <th className="p-2 border">#</th>
                 <th className="p-2 border">User</th>
@@ -127,7 +100,7 @@ const ManageOrders = () => {
             </thead>
             <tbody>
               {orders.map((order) => (
-                <tr key={order.id} className="text-center">
+                <tr key={order.id} className="text-center hover:bg-[#fff3e0]">
                   <td className="p-2 border">{order.id}</td>
                   <td className="p-2 border">{order.user?.name || "N/A"}</td>
                   <td className="p-2 border">{order.restaurant?.name || "N/A"}</td>
@@ -139,9 +112,7 @@ const ManageOrders = () => {
                   </td>
                   <td className="p-2 border">
                     <span
-                      className={`px-2 py-1 rounded text-xs font-medium ${
-                        statusColors[order.status]
-                      }`}
+                      className={`px-2 py-1 rounded text-xs font-semibold ${statusColors[order.status]}`}
                     >
                       {order.status}
                     </span>
@@ -163,10 +134,7 @@ const ManageOrders = () => {
                       className="text-sm border rounded p-1"
                       value={order.status}
                       onChange={(e) =>
-                        handleStatusChange(
-                          order.id,
-                          e.target.value as Order["status"]
-                        )
+                        handleStatusChange(order.id, e.target.value as Order["status"])
                       }
                     >
                       <option value="pending">Pending</option>

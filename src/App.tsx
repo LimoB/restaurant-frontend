@@ -1,37 +1,21 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-
-// Public Pages
-import LandingPage from "./pages/LandingPage/LandingPage";
-import RegisterPage from "./pages/RegisterPage";
-import LoginPage from "./pages/LoginPage";
-import MenuPage from "./pages/MenuPage";
-import RequestResetPage from "./pages/RequestResetPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
-import Unauthorized from "./pages/Unauthorized";
-
-// Layouts and Guards
-import Layout from "./components/Layout";
-import RequireRole from "./components/RequireRole";
-import AdminLayout from "./admin/AdminLayout";
-
-// Admin Pages
-import AdminDashboard from "./admin/AdminDashboard";
-import ManageUsers from "./admin/ManageUsers";
-import ManageRestaurants from "./admin/ManageRestaurants";
-import ManageOrders from "./admin/ManageOrders";
-import AdminSettings from "./admin/AdminSettings";
-
-// Auth Logic
 import { useAppDispatch, useAppSelector } from "./hooks/hooks";
 import { logout } from "./features/auth/authSlice";
 import { isTokenExpired } from "./utils/checkTokenExpiry";
+
+// Layout
+import Layout from "./components/PublicLayout";
+
+// Route groups
+import { PublicRoutes } from "./routes/PublicRoutes";
+import { AdminRoutes } from "./routes/AdminRoutes";
+import { UserRoutes } from "./routes/UserRoutes"; // ✅ Import member routes
 
 function App() {
   const dispatch = useAppDispatch();
   const { token } = useAppSelector((state) => state.auth);
 
-  // ⏳ Auto-logout on token expiration
   useEffect(() => {
     if (token && isTokenExpired(token)) {
       dispatch(logout());
@@ -42,36 +26,11 @@ function App() {
     <div className="min-h-screen font-sans">
       <BrowserRouter>
         <Routes>
-          {/* 🌐 Public Routes */}
-          <Route path="/" element={<Layout><LandingPage /></Layout>} />
-          <Route path="/register" element={<Layout><RegisterPage /></Layout>} />
-          <Route path="/login" element={<Layout><LoginPage /></Layout>} />
-          <Route path="/menu" element={<Layout><MenuPage /></Layout>} />
-          <Route path="/request-reset" element={<Layout><RequestResetPage /></Layout>} />
-          <Route path="/reset-password" element={<Layout><ResetPasswordPage /></Layout>} />
-          <Route path="/unauthorized" element={<Layout><Unauthorized /></Layout>} />
+          {PublicRoutes}
+          {AdminRoutes}
+          {UserRoutes} {/* ✅ Member routes added */}
 
-          {/* 🛡️ Admin Protected Routes */}
-          <Route element={<RequireRole allowedRoles={["admin"]} />}>
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<AdminDashboard />} />
-              <Route path="users" element={<ManageUsers />} />
-              <Route path="restaurants" element={<ManageRestaurants />} />
-              <Route path="orders" element={<ManageOrders />} />
-              <Route path="settings" element={<AdminSettings />} />
-            </Route>
-          </Route>
-
-          {/* 🚧 Future: Owner or Driver Routes */}
-          {/*
-          <Route element={<RequireRole allowedRoles={["owner"]} />}>
-            <Route path="/owner" element={<OwnerLayout />}>
-              <Route index element={<OwnerDashboard />} />
-            </Route>
-          </Route>
-          */}
-
-          {/* ❌ 404 Fallback */}
+          {/* ❌ 404 fallback */}
           <Route
             path="*"
             element={

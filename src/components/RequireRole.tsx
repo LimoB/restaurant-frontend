@@ -1,4 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
 import { isTokenExpired } from "../utils/checkTokenExpiry";
 
 interface RequireRoleProps {
@@ -6,17 +8,17 @@ interface RequireRoleProps {
 }
 
 export default function RequireRole({ allowedRoles }: RequireRoleProps) {
-  const token = localStorage.getItem("token");
-  const stored = localStorage.getItem("user");
-  const user = stored ? JSON.parse(stored) : null;
+  const { user, token } = useSelector((state: RootState) => state.auth);
 
-  // ❌ If no user or token, or token is expired — redirect to login
-  if (!user || !token || isTokenExpired(token)) {
-    localStorage.clear(); // Auto-logout
+  // ⏳ If auth state not loaded yet (possible on first mount)
+  if (!user || !token) return null;
+
+  // ❌ If token is expired — logout and redirect
+  if (isTokenExpired(token)) {
     return <Navigate to="/login" replace />;
   }
 
-  // 🚫 If user exists but role not allowed — redirect to unauthorized page
+  // 🚫 If user exists but role is not allowed
   if (!allowedRoles.includes(user.user_type)) {
     return <Navigate to="/unauthorized" replace />;
   }

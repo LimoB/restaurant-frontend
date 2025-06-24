@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
-import { loginUser } from "../services/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../services/auth";
+import { loginSuccess } from "../features/auth/authSlice";
 
 function LoginPage() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -19,27 +23,23 @@ function LoginPage() {
     }
   }, []);
 
-
-
-
-
-  
   const handleLogin = async () => {
     try {
       setLoading(true);
       const res = await loginUser(formData);
       const userData = res.data;
 
-      localStorage.setItem("token", userData.token);
-      localStorage.setItem("user", JSON.stringify(userData));
+      dispatch(loginSuccess({ token: userData.token, user: userData }));
 
-      rememberMe
-        ? localStorage.setItem("rememberedEmail", formData.email)
-        : localStorage.removeItem("rememberedEmail");
+      if (rememberMe) {
+        localStorage.setItem("rememberedEmail", formData.email);
+      } else {
+        localStorage.removeItem("rememberedEmail");
+      }
 
-      switch (userData.user_type) {
+      switch (userData.user_type?.toLowerCase()) {
         case "member":
-          navigate("/menu");
+          navigate("/user");
           break;
         case "owner":
           navigate("/owner/dashboard");
@@ -61,26 +61,31 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-base-200 px-4">
-      <div className="w-full max-w-md bg-base-100 shadow-2xl rounded-2xl p-8 space-y-6">
-        <h2 className="text-3xl font-bold text-center text-white">Welcome Back</h2>
-        <p className="text-sm text-center text-gray-400">
-          Enter your credentials to access your account
+    <div
+      className="min-h-screen flex items-center justify-center px-4 py-12 bg-cover bg-center"
+      style={{
+        backgroundImage: "url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1740&q=80')",
+      }}
+    >
+      <div className="w-full max-w-md backdrop-blur-md bg-white/80 shadow-2xl rounded-2xl p-8 space-y-6 border border-gray-200">
+        <h2 className="text-3xl font-bold text-center text-[#442c1c]">Welcome Back</h2>
+        <p className="text-sm text-center text-[#6b4c3b]">
+          Enter your credentials to sign in
         </p>
 
         {error && (
-          <div className="text-sm text-red-400 bg-red-900/30 border border-red-500 rounded-lg p-3">
+          <div className="text-sm text-red-700 bg-red-100 border border-red-300 rounded px-4 py-3">
             {error}
           </div>
         )}
 
         {/* Email */}
         <div className="space-y-1">
-          <label className="text-sm font-medium text-gray-300">Email</label>
+          <label className="text-sm font-medium text-[#5c4433]">Email</label>
           <input
             type="email"
             placeholder="you@example.com"
-            className="w-full input input-bordered bg-base-200 text-white"
+            className="w-full border border-gray-300 rounded-xl px-4 py-2 text-[#442c1c] focus:outline-none focus:ring-2 focus:ring-orange-400"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           />
@@ -88,36 +93,36 @@ function LoginPage() {
 
         {/* Password */}
         <div className="space-y-1 relative">
-          <label className="text-sm font-medium text-gray-300">Password</label>
+          <label className="text-sm font-medium text-[#5c4433]">Password</label>
           <input
             type={showPassword ? "text" : "password"}
             placeholder="••••••••"
-            className="w-full input input-bordered bg-base-200 text-white pr-10"
+            className="w-full border border-gray-300 rounded-xl px-4 py-2 pr-10 text-[#442c1c] focus:outline-none focus:ring-2 focus:ring-orange-400"
             value={formData.password}
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-9 text-gray-400"
+            className="absolute right-3 top-9 text-gray-400 hover:text-gray-600"
             aria-label="Toggle password visibility"
           >
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
         </div>
 
-        {/* Remember Me / Forgot */}
-        <div className="flex justify-between items-center text-sm text-gray-400">
+        {/* Remember Me / Forgot Password */}
+        <div className="flex justify-between items-center text-sm text-[#6b4c3b]">
           <label className="flex items-center gap-2">
             <input
               type="checkbox"
               checked={rememberMe}
               onChange={() => setRememberMe(!rememberMe)}
-              className="checkbox checkbox-sm"
+              className="h-4 w-4 text-orange-600 border-gray-300 rounded"
             />
             Remember me
           </label>
-          <Link to="/request-reset" className="text-blue-400 hover:underline">
+          <Link to="/request-reset" className="text-orange-600 hover:underline">
             Forgot password?
           </Link>
         </div>
@@ -126,15 +131,18 @@ function LoginPage() {
         <button
           onClick={handleLogin}
           disabled={loading}
-          className="btn btn-primary w-full"
+          className={`w-full py-2 px-4 rounded-xl font-semibold transition-colors ${loading
+            ? "bg-orange-300 cursor-not-allowed text-white"
+            : "bg-[#6b3f1d] hover:bg-[#8b4e23] text-white"
+            }`}
         >
-          {loading ? <span className="loading loading-spinner" /> : "Login"}
+          {loading ? "Logging in..." : "Login"}
         </button>
 
-        {/* Register */}
-        <p className="text-center text-sm text-gray-400">
+        {/* Register Link */}
+        <p className="text-center text-sm text-[#6b4c3b]">
           Don’t have an account?{" "}
-          <Link to="/register" className="text-blue-400 font-medium hover:underline">
+          <Link to="/register" className="text-orange-600 font-medium hover:underline">
             Register here
           </Link>
         </p>

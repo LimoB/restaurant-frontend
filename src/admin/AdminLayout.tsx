@@ -26,54 +26,61 @@ const AdminLayout = () => {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-base-100">
+    <div className="flex min-h-screen bg-[#fffaf0] text-[#442c1c] font-sans">
       {/* Sidebar */}
-      <aside className="w-64 bg-secondary text-white p-6 hidden md:block">
-        <h2 className="text-2xl font-bold mb-8">🍽️ Admin Panel</h2>
-        <nav className="space-y-3">
-          <Link to="/admin" className="block hover:text-accent">Dashboard</Link>
-          <Link to="/admin/users" className="block hover:text-accent">Users</Link>
-          <Link to="/admin/restaurants" className="block hover:text-accent">Restaurants</Link>
-          <Link to="/admin/orders" className="block hover:text-accent">Orders</Link>
-          {/* Settings removed from sidebar */}
+      <aside className="w-64 bg-gradient-to-b from-[#93512c] to-[#7b3e19] text-white p-6 hidden md:block shadow-lg">
+        <h2 className="text-2xl font-extrabold mb-8 tracking-wide">🍽️ Admin Panel</h2>
+        <nav className="space-y-4 text-base font-medium">
+          <Link to="/admin" className="block hover:text-yellow-300 transition">
+            Dashboard
+          </Link>
+          <Link to="/admin/users" className="block hover:text-yellow-300 transition">
+            Users
+          </Link>
+          <Link to="/admin/restaurants" className="block hover:text-yellow-300 transition">
+            Restaurants
+          </Link>
+          <Link to="/admin/orders" className="block hover:text-yellow-300 transition">
+            Orders
+          </Link>
         </nav>
       </aside>
 
-      {/* Main Content Area */}
+      {/* Main Content */}
       <div className="flex flex-col flex-1">
         {/* Top Navbar */}
-        <header className="flex items-center justify-between bg-primary text-white px-6 py-4 shadow-md">
-          <h1 className="text-xl font-semibold">Admin Dashboard</h1>
+        <header className="flex items-center justify-between px-6 py-4 bg-[#93512c] text-white shadow-md">
+          <h1 className="text-xl font-semibold tracking-wide">Admin Dashboard</h1>
 
           {/* Profile Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center space-x-2 hover:text-yellow-200"
+              className="flex items-center space-x-2 hover:text-yellow-200 transition-colors"
             >
               <User size={20} />
-              <span>Admin</span>
+              <span className="font-medium">Admin</span>
             </button>
 
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-44 bg-white text-gray-800 rounded-md shadow-lg z-50">
+              <div className="absolute right-0 mt-2 w-44 bg-[#fff3e0] text-[#5b2c0f] rounded-xl shadow-xl z-50 overflow-hidden border border-[#93512c]">
                 <Link
                   to="/admin/profile"
                   onClick={() => setDropdownOpen(false)}
-                  className="block px-4 py-2 hover:bg-gray-100"
+                  className="block px-4 py-2 hover:bg-[#f5e1c8] transition"
                 >
                   My Profile
                 </Link>
                 <Link
                   to="/admin/settings"
                   onClick={() => setDropdownOpen(false)}
-                  className="block px-4 py-2 hover:bg-gray-100 flex items-center gap-2"
+                  className="block px-4 py-2 hover:bg-[#f5e1c8] flex items-center gap-2 transition"
                 >
                   <Settings size={16} /> Settings
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2"
+                  className="w-full text-left px-4 py-2 hover:bg-[#f5e1c8] flex items-center gap-2 text-red-600 transition"
                 >
                   <LogOut size={16} /> Logout
                 </button>
@@ -83,7 +90,7 @@ const AdminLayout = () => {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-6 bg-gray-50">
+        <main className="flex-1 p-6 bg-[#fdf6eb] overflow-auto">
           <Outlet />
         </main>
       </div>

@@ -19,23 +19,5 @@ export default {
       },
     },
   },
-  plugins: [require("daisyui")],
-  daisyui: {
-    themes: [
-      {
-        gourmettheme: {
-          primary: "#ea580c",
-          secondary: "#1f2937",
-          accent: "#f59e0b",
-          neutral: "#3D4451",
-          "base-100": "#ffffff",
-          info: "#3ABFF8",
-          success: "#36D399",
-          warning: "#FBBD23",
-          error: "#F87272",
-        },
-      },
-    ],
-    darkTheme: "gourmettheme",
-  },
+  plugins: [],
 }
