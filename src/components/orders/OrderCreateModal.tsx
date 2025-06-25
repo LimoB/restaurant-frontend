@@ -1,13 +1,12 @@
-// src/components/OrderCreateModal.tsx
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { fetchAllUsers } from "../services/users";
-import { fetchRestaurants } from "../services/restaurants";
-import { fetchAllAddresses } from "../services/addresses";
 
-import { fetchDrivers } from "../services/admin";
-import { createOrder, type OrderInput } from "../services/orders";
+import { fetchAllUsers } from "../../services/users";
+import { fetchRestaurants } from "../../services/restaurants";
+import { fetchAllAddresses, type Address } from "../../services/addresses";
+import { fetchAllDrivers } from "../../services/driver";
+import { createOrder, type OrderInput } from "../../services/orders";
 
 interface Props {
   onClose: () => void;
@@ -17,7 +16,7 @@ interface Props {
 const OrderCreateModal = ({ onClose, onOrderCreated }: Props) => {
   const [users, setUsers] = useState<{ id: number; name: string }[]>([]);
   const [restaurants, setRestaurants] = useState<{ id: number; name: string }[]>([]);
-  const [addresses, setAddresses] = useState<{ id: number; city: { name: string; state: { name: string } } }[]>([]);
+  const [addresses, setAddresses] = useState<Address[]>([]);
   const [drivers, setDrivers] = useState<{ id: number; name: string }[]>([]);
 
   const [newOrder, setNewOrder] = useState<OrderInput>({
@@ -38,14 +37,25 @@ const OrderCreateModal = ({ onClose, onOrderCreated }: Props) => {
       fetchAllUsers(),
       fetchRestaurants(),
       fetchAllAddresses(),
-      fetchDrivers(),
+      fetchAllDrivers(),
     ]).then(([userRes, restRes, addrRes, driverRes]) => {
       setUsers(userRes);
       setRestaurants(restRes);
       setAddresses(addrRes);
-      setDrivers(driverRes.data);
+
+      // Fix for optional driver.name
+      setDrivers(
+        driverRes.map((d) => ({
+          id: d.id,
+          name:
+            d.name ??
+            `${d.car_make ?? "Unknown Make"} ${d.car_model ?? "Model"}`.trim(),
+        }))
+      );
+
     });
   }, []);
+
 
   const handleCreate = async () => {
     try {
@@ -89,7 +99,9 @@ const OrderCreateModal = ({ onClose, onOrderCreated }: Props) => {
             className="border p-2 rounded w-full"
           >
             {addresses.map((a) => (
-              <option key={a.id} value={a.id}>{a.city.name}, {a.city.state.name}</option>
+              <option key={a.id} value={a.id}>
+                {a.street_address_1}, {a.zip_code}
+              </option>
             ))}
           </select>
 

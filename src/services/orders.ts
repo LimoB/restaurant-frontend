@@ -1,4 +1,5 @@
 import client from "../api/client";
+import { toast } from "react-toastify";
 
 // Define structure for related entities
 export interface User {
@@ -49,38 +50,72 @@ export interface Order {
   delivery_address?: Address;
 }
 
-// Input type for creating/updating an order (without readonly fields)
-export type OrderInput = Omit<Order, "id" | "created_at" | "updated_at" | "user" | "restaurant" | "driver" | "delivery_address">;
+// Input type for creating/updating an order (excluding readonly/nested fields)
+export type OrderInput = Omit<
+  Order,
+  "id" | "created_at" | "updated_at" | "user" | "restaurant" | "driver" | "delivery_address"
+>;
 
-// Fetch all orders (with optional nested user/restaurant/driver)
+// Utility function for error handling
+const handleRequestError = (error: any, message = "Something went wrong") => {
+  if (error?.response?.status === 429) {
+    toast.error("Too many requests. Please wait and try again.");
+  } else {
+    toast.error(message);
+  }
+  console.error("Order API error:", error);
+  throw error;
+};
+
+// Fetch all orders
 export const fetchAllOrders = async (): Promise<Order[]> => {
-  const res = await client.get("/orders");
-  return res.data;
+  try {
+    const res = await client.get("/orders");
+    return res.data;
+  } catch (error) {
+    return handleRequestError(error, "Failed to load orders.");
+  }
 };
 
 // Fetch single order by ID
 export const fetchOrderById = async (id: number): Promise<Order> => {
-  const res = await client.get(`/orders/${id}`);
-  return res.data;
+  try {
+    const res = await client.get(`/orders/${id}`);
+    return res.data;
+  } catch (error) {
+    return handleRequestError(error, "Failed to fetch order.");
+  }
 };
 
 // Create a new order
 export const createOrder = async (data: OrderInput): Promise<Order> => {
-  const res = await client.post("/orders", data);
-  return res.data;
+  try {
+    const res = await client.post("/orders", data);
+    return res.data;
+  } catch (error) {
+    return handleRequestError(error, "Failed to create order.");
+  }
 };
 
-// Update an order (e.g. status or other fields)
+// Update an order
 export const updateOrder = async (
   id: number,
   data: Partial<OrderInput>
 ): Promise<Order> => {
-  const res = await client.put(`/orders/${id}`, data);
-  return res.data;
+  try {
+    const res = await client.put(`/orders/${id}`, data);
+    return res.data;
+  } catch (error) {
+    return handleRequestError(error, "Failed to update order.");
+  }
 };
 
 // Delete an order
 export const deleteOrder = async (id: number): Promise<{ success: boolean }> => {
-  const res = await client.delete(`/orders/${id}`);
-  return res.data;
+  try {
+    const res = await client.delete(`/orders/${id}`);
+    return res.data;
+  } catch (error) {
+    return handleRequestError(error, "Failed to delete order.");
+  }
 };
