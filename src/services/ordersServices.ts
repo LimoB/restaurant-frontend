@@ -59,13 +59,22 @@ export const fetchOrderById = async (id: number): Promise<Order> => {
 export const createOrder = async (data: OrderInput): Promise<Order> => {
   console.log("📦 Creating order with payload:", data);
   try {
-    const res = await client.post<Order>("/orders", data);
-    console.log("✅ Order created:", res.data);
-    return res.data;
+    const res = await client.post<{
+      success: boolean;
+      message: string;
+      data: {
+        order: Order;
+        items: any[];
+      };
+    }>("/orders", data);
+
+    console.log("✅ Order created:", res.data.data);
+    return res.data.data.order;
   } catch (error) {
     return handleRequestError(error, "Failed to create order.");
   }
 };
+
 
 // ✅ Update an existing order
 export const updateOrder = async (
@@ -81,6 +90,38 @@ export const updateOrder = async (
     return handleRequestError(error, "Failed to update order.");
   }
 };
+
+
+// ✅ Define a proper response type
+interface OrdersResponse {
+  success: boolean;
+  data: Order[];
+}
+
+// ✅ Fetch orders for a specific user
+export const fetchOrdersByUserId = async (
+  userId: number,
+  token?: string // optional if client already attaches it
+): Promise<Order[]> => {
+  console.log(`📤 Fetching orders for user ID: ${userId}`);
+  try {
+    const res = await client.get<OrdersResponse>(`/orders/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("✅ Orders for user:", res.data);
+    return res.data.data; // ✅ Only return the array of orders
+  } catch (error) {
+    return handleRequestError(error, "Failed to load your orders.");
+  }
+};
+
+
+
+
+
+
 
 // ✅ Delete an order
 export const deleteOrder = async (id: number): Promise<{ success: boolean }> => {

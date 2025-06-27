@@ -1,53 +1,42 @@
-// components/ConfirmModal/OrderSummaryView.tsx
+// components/ConfirmModal/ConfirmModalContent.tsx
 import { Loader } from "lucide-react";
 import { Link } from "react-router-dom";
+import OrderSummary from "./OrderSummary";
+
 import type { CartItem } from "../../types/cart";
 
-interface Props {
+type Props = {
   cart: CartItem[];
   total: number;
-  orderComment: string;
-  setOrderComment: (value: string) => void;
   isConfirmDisabled: boolean;
   handleConfirm: () => void;
-  onClose: () => void;
   isSubmitting: boolean;
-  isLoggedIn: boolean;
+  orderComment: string;
+  setOrderComment: (val: string) => void;
   hasMultipleRestaurants: boolean;
-}
+  onClose: () => void;
+  isLoggedIn: boolean;
+};
 
-const OrderSummaryView = ({
+const ConfirmModalContent = ({
   cart,
   total,
-  orderComment,
-  setOrderComment,
   isConfirmDisabled,
   handleConfirm,
-  onClose,
   isSubmitting,
-  isLoggedIn,
+  orderComment,
+  setOrderComment,
   hasMultipleRestaurants,
+  onClose,
+  isLoggedIn,
 }: Props) => {
+  const cartIsEmpty = cart.length === 0;
+
   return (
     <>
       <h2 className="text-xl font-semibold text-gray-800 mb-5">Confirm Your Order</h2>
 
-      {cart.length > 0 ? (
-        <div className="rounded-xl border border-blue-200 bg-white p-4 text-sm text-left max-h-48 overflow-y-auto shadow-inner">
-          {cart.map((item) => (
-            <div key={item.id} className="flex justify-between py-1 border-b last:border-none">
-              <span>{item.name} × {item.quantity}</span>
-              <span>${(item.price * item.quantity).toFixed(2)}</span>
-            </div>
-          ))}
-          <div className="flex justify-between font-semibold mt-3 pt-2 border-t border-gray-300">
-            <span>Total:</span>
-            <span>${total.toFixed(2)}</span>
-          </div>
-        </div>
-      ) : (
-        <p className="text-sm text-gray-500">Your cart is empty.</p>
-      )}
+      {!cartIsEmpty ? <OrderSummary cart={cart} total={total} /> : <p>Your cart is empty.</p>}
 
       <div className="mt-4">
         <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-1">
@@ -91,13 +80,17 @@ const OrderSummaryView = ({
         </button>
       </div>
 
-      {!isLoggedIn && cart.length > 0 && (
+      {!isLoggedIn && !cartIsEmpty && (
         <p className="mt-4 text-sm text-red-600 text-center">
-          Please <Link to="/login" className="underline text-blue-600 hover:text-blue-700 font-medium">log in</Link> to complete your order.
+          Please{" "}
+          <Link to="/login" onClick={onClose} className="underline text-blue-600 hover:text-blue-700 font-medium">
+            log in
+          </Link>{" "}
+          to complete your order.
         </p>
       )}
     </>
   );
 };
 
-export default OrderSummaryView;
+export default ConfirmModalContent;

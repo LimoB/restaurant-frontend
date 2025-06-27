@@ -5,7 +5,7 @@ import { FaUtensils } from "react-icons/fa";
 import { HiMenu, HiX } from "react-icons/hi";
 import CartButton from "../components/CartButton";
 import CartPanel from "../components/CartPanel";
-import ConfirmModal from "../components/ConfirmOrderModal";
+import ConfirmModal from "../components/ConfirmModal/ConfirmModal";
 import { useCart } from "../context/CartContext";
 
 interface Props {
@@ -26,7 +26,7 @@ const PublicLayout = ({ children }: Props) => {
     const openConfirm = () => setConfirmOpen(true);
     const closeConfirm = () => setConfirmOpen(false);
 
-    const total = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
+const total = cart.reduce((sum, item) => sum + item.quantity * Number(item.price), 0);
 
     const handleOrderNowClick = () => {
         closeCart();

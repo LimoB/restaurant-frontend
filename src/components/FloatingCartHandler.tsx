@@ -1,31 +1,22 @@
 import { useState } from "react";
 import CartButton from "./CartButton";
 import CartPanel from "./CartPanel";
-import ConfirmModal from "./ConfirmOrderModal";
+import ConfirmModal from "./ConfirmModal/ConfirmModal";
 import { useCart } from "../context/CartContext";
-import { useCartActions } from "../hooks/useCartActions";
 
 const FloatingCartHandler = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [orderConfirmed, setOrderConfirmed] = useState(false);
 
   const { cart } = useCart();
-  const { clearCart } = useCartActions();
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const total = cart.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
 
   const openCart = () => setCartOpen(true);
   const closeCart = () => setCartOpen(false);
 
   const handleOrderNowClick = () => {
     setShowConfirmModal(true);
-    setOrderConfirmed(false);
-  };
-
-  const handleConfirmOrder = () => {
-    clearCart();
-    setOrderConfirmed(true);
   };
 
   const handleCloseModal = () => {
@@ -48,11 +39,9 @@ const FloatingCartHandler = () => {
       <ConfirmModal
         show={showConfirmModal}
         onClose={handleCloseModal}
-        onConfirm={handleConfirmOrder}
         product={null}
         cart={cart}
         total={total}
-        orderConfirmed={orderConfirmed}
       />
     </>
   );

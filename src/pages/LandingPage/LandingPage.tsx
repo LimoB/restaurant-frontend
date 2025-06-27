@@ -14,7 +14,7 @@ import Footer from "./Footer";
 
 // Components
 import CartPanel from "../../components/CartPanel";
-import ConfirmModal from "../../components/ConfirmOrderModal";
+import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import type { Product } from "../../types/product";
 import type { CartItem } from "../../types/cart";
 
@@ -36,9 +36,11 @@ const LandingPage = () => {
 
   const [showCartPanel, setShowCartPanel] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [orderConfirmed, setOrderConfirmed] = useState(false);
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const total = cart.reduce(
+    (sum, item) => sum + parseFloat(item.price) * item.quantity,
+    0
+  );
 
   useEffect(() => {
     console.log("📦 LandingPage mounted", {
@@ -54,28 +56,25 @@ const LandingPage = () => {
     [cart]
   );
 
-  // ✅ updated: no longer opens cart panel on "Add"
   const handleAddToCart = useCallback(
     (product: Product) => {
       addToCart(product);
-      // ❌ don't open the cart panel here
     },
     [addToCart]
   );
 
   const handleOrderNowClick = useCallback(() => {
     if (cart.length === 0) {
-      toast.error("Your cart is empty.");
+      toast.error("🛒 Your cart is empty.");
       return;
     }
     console.log("🧡 CartPanel Order Now clicked");
-    setOrderConfirmed(false);
     setShowConfirmModal(true);
   }, [cart]);
 
   const handleCloseModal = useCallback(() => {
     console.log("🟥 ConfirmModal hidden");
-    setShowConfirmModal(true);
+    setShowConfirmModal(false);
   }, []);
 
   const normalizedCart: CartItem[] = cart.map((item) => ({
@@ -130,7 +129,6 @@ const LandingPage = () => {
           product={null}
           cart={normalizedCart}
           total={total}
-          orderConfirmed={orderConfirmed}
         />
       </div>
     </div>

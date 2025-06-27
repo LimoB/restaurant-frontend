@@ -14,7 +14,9 @@ const CartPanel = ({
 }) => {
   const { cart } = useCart();
   const panelRef = useRef<HTMLDivElement>(null);
-  const total = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
+  // const total = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
+  const total = cart.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
+
 
   useEffect(() => {
     const panel = panelRef.current;
@@ -74,7 +76,7 @@ const CartPanel = ({
                 <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
               </div>
               <span className="font-semibold text-gray-700">
-                ${(item.price * item.quantity).toFixed(2)}
+                ${(Number(item.price) * item.quantity).toFixed(2)}
               </span>
             </div>
           ))

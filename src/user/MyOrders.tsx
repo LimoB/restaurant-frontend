@@ -1,57 +1,57 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
+import { fetchOrdersByUserId } from "../services/ordersServices";
+import type { Order } from "../types/order";
 
-interface Order {
-  id: string;
-  date: string;
-  status: "Pending" | "Shipped" | "Delivered" | "Cancelled";
-  total: number;
-  items: number;
-}
+// ✅ Status color map
+const statusColors: Record<Order["status"], string> = {
+  pending: "text-yellow-500",
+  accepted: "text-blue-500",
+  rejected: "text-red-500",
+  delivered: "text-green-600",
+};
 
 export default function MyOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const user = useSelector((state: RootState) => state.auth.user);
+  const token = useSelector((state: RootState) => state.auth.token);
 
   useEffect(() => {
-    // Simulate fetching orders
-    const mockOrders: Order[] = [
-      {
-        id: "ORD001",
-        date: "2025-06-21",
-        status: "Delivered",
-        total: 59.99,
-        items: 3,
-      },
-      {
-        id: "ORD002",
-        date: "2025-06-18",
-        status: "Shipped",
-        total: 34.5,
-        items: 2,
-      },
-      {
-        id: "ORD003",
-        date: "2025-06-15",
-        status: "Cancelled",
-        total: 15.0,
-        items: 1,
-      },
-    ];
-    setOrders(mockOrders);
-  }, []);
+    const loadOrders = async () => {
+      if (!user || !token) {
+        setError("You must be logged in to view orders.");
+        setLoading(false);
+        return;
+      }
 
-  const statusColor = {
-    Pending: "text-yellow-500",
-    Shipped: "text-blue-500",
-    Delivered: "text-green-600",
-    Cancelled: "text-red-500",
-  };
+      try {
+        const fetchedOrders = await fetchOrdersByUserId(user.id, token);
+        setOrders(fetchedOrders); // ✅ Direct use
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+        setError("Unable to fetch orders.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadOrders();
+  }, [user, token]);
 
   return (
     <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10 max-w-5xl mx-auto">
       <h1 className="text-3xl font-extrabold text-orange-700 mb-6">📦 My Orders</h1>
 
-      {orders.length === 0 ? (
-        <p className="text-gray-600 text-base">You have no orders yet.</p>
+      {loading ? (
+        <p className="text-gray-500">Loading...</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : orders.length === 0 ? (
+        <p className="text-gray-600">You have no orders yet.</p>
       ) : (
         <div className="overflow-x-auto rounded-xl">
           <table className="min-w-full text-sm text-left text-gray-700 border border-gray-200">
@@ -65,20 +65,38 @@ export default function MyOrders() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {orders.map((order) => (
-                <tr
-                  key={order.id}
-                  className="hover:bg-orange-50 transition-colors duration-150"
-                >
-                  <td className="px-5 py-3 font-medium">{order.id}</td>
-                  <td className="px-5 py-3">{order.date}</td>
-                  <td className={`px-5 py-3 font-semibold ${statusColor[order.status]}`}>
-                    {order.status}
-                  </td>
-                  <td className="px-5 py-3">{order.items}</td>
-                  <td className="px-5 py-3">${order.total.toFixed(2)}</td>
-                </tr>
-              ))}
+              {orders.map((order) => {
+                console.log("🧾 Order:", {
+                  id: order.id,
+                  orderMenuItems: order.orderMenuItems,
+                });
+
+                const total = (order.orderMenuItems || []).reduce((sum, item) => {
+                  const price = parseFloat(item.price);
+                  const quantity = item.quantity ?? 1;
+                  return sum + (isNaN(price) ? 0 : price * quantity);
+                }, 0);
+
+                return (
+                  <tr key={order.id} className="hover:bg-orange-50 transition-colors duration-150">
+                    <td className="px-5 py-3 font-medium">{order.id}</td>
+                    <td className="px-5 py-3">
+                      {new Date(order.created_at).toLocaleDateString()}
+                    </td>
+                    <td className={`px-5 py-3 font-semibold ${statusColors[order.status]}`}>
+                      {order.status}
+                    </td>
+                    <td className="px-5 py-3">
+                      {order.orderMenuItems?.length ?? 0}
+                    </td>
+                    <td className="px-5 py-3">
+                      ${total.toFixed(2)}
+                    </td>
+                  </tr>
+                );
+              })}
+
+
             </tbody>
           </table>
         </div>

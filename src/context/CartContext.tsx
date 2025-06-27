@@ -6,9 +6,14 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-import type { Product } from "../types/product"; // ✅ Use shared Product type
+import type { Product } from "../types/product";
 
-type CartItem = Product & { quantity: number };
+// ✅ Extend Product for cart with necessary fields
+export type CartItem = Omit<Product, "price"> & {
+  quantity: number;
+  restaurant_id: number;
+  price: string; // as required by OrderInput
+};
 
 type CartAction =
   | { type: "ADD"; payload: Product }
@@ -20,22 +25,35 @@ type CartAction =
 type CartContextType = {
   cart: CartItem[];
   dispatch: React.Dispatch<CartAction>;
-  clearCart: () => void; // ✅ Add clearCart to the context type
+  clearCart: () => void;
 };
 
 const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
   switch (action.type) {
     case "ADD": {
-      const exists = state.find((item) => item.id === action.payload.id);
-      if (exists) {
+      const existing = state.find((item) => item.id === action.payload.id);
+      if (existing) {
         return state.map((item) =>
           item.id === action.payload.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
-      } else {
-        return [...state, { ...action.payload, quantity: 1 }];
       }
+
+      const restaurantId =
+        typeof action.payload.restaurant?.id === "number"
+          ? action.payload.restaurant.id
+          : action.payload.restaurant_id ?? 0;
+
+      return [
+        ...state,
+        {
+          ...action.payload,
+          quantity: 1,
+          restaurant_id: restaurantId,
+          price: String(action.payload.price), // Ensure price is string
+        },
+      ];
     }
 
     case "INCREMENT":
@@ -87,9 +105,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  const clearCart = () => {
-    dispatch({ type: "CLEAR" });
-  };
+  const clearCart = () => dispatch({ type: "CLEAR" });
 
   return (
     <CartContext.Provider value={{ cart, dispatch, clearCart }}>

@@ -43,9 +43,8 @@ const ConfirmDialog = ({
           </button>
           <button
             onClick={onConfirm}
-            className={`px-4 py-2 rounded-lg text-sm text-white ${
-              danger ? "bg-red-600 hover:bg-red-700" : "bg-blue-600 hover:bg-blue-700"
-            }`}
+            className={`px-4 py-2 rounded-lg text-sm text-white ${danger ? "bg-red-600 hover:bg-red-700" : "bg-blue-600 hover:bg-blue-700"
+              }`}
           >
             {confirmText}
           </button>
@@ -56,3 +55,7 @@ const ConfirmDialog = ({
 };
 
 export default ConfirmDialog;
+
+
+
+///admin

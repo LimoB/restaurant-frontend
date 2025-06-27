@@ -31,17 +31,30 @@ function LoginPage() {
       const res = await loginUser(formData);
       const userData = res.data;
 
-      // ✅ Store token in localStorage
+      // ✅ Normalize user to match authSlice.User interface
+      const normalizedUser = {
+        id: userData.userId,           // backend returns userId, but we store it as id
+        name: userData.name,
+        email: userData.email,
+        user_type: userData.user_type,
+        address_id: userData.address_id,
+      };
+
+      // ✅ Store token + user in localStorage
       localStorage.setItem("token", userData.token);
+      localStorage.setItem("user", JSON.stringify(normalizedUser));
 
-      dispatch(loginSuccess({ token: userData.token, user: userData }));
+      // ✅ Dispatch to Redux
+      dispatch(loginSuccess({ token: userData.token, user: normalizedUser }));
 
+      // ✅ Save remembered email if checked
       if (rememberMe) {
         localStorage.setItem("rememberedEmail", formData.email);
       } else {
         localStorage.removeItem("rememberedEmail");
       }
 
+      // ✅ Role-based redirect
       switch (userData.user_type?.toLowerCase()) {
         case "member":
           navigate("/user");

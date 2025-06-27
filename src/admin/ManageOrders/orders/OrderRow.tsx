@@ -1,5 +1,5 @@
 import OrderActions from "./OrderActions";
-import { statusColors } from "../../../utils/orderStatusColors";
+import { statusColors } from "../../../types/orderStatus";
 import type { Order } from "../../../types/order";
 import { Button } from "../../../components/ui/button";
 

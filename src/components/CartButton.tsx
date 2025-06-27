@@ -15,7 +15,7 @@ const CartButton = ({ onClick }: CartButtonProps) => {
       className="bg-orange-600 hover:bg-orange-700 text-white px-5 py-3 rounded-full shadow-xl z-50 flex items-center gap-2 text-base"
     >
       <ShoppingCart size={20} />
-      {totalItems === 0 ? "My Cart" : `${totalItems} item${totalItems > 1 ? "s" : ""}`}
+      {totalItems === 0 ? "View Cart" : `${totalItems} item${totalItems > 1 ? "s" : ""}`}
     </button>
   );
 };
