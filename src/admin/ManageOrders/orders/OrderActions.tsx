@@ -1,11 +1,12 @@
-import type { Order } from "../../types/order";
+import type { Order } from "../../../types/order";
+import { Button } from "../../../components/ui/button";
 
 interface Props {
   order: Order;
   onDelete: (id: number) => void;
   onStatusChange: (id: number, status: Order["status"]) => void;
   onEdit: (id: number) => void;
-  disabled?: boolean; // 🆕 Optional prop
+  disabled?: boolean;
 }
 
 const OrderActions = ({
@@ -16,9 +17,9 @@ const OrderActions = ({
   disabled = false,
 }: Props) => {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3 flex-wrap">
       <select
-        className="text-sm border rounded p-1 bg-white disabled:opacity-50"
+        className="text-sm px-2 py-1 rounded-md border border-gray-300 shadow-sm bg-white focus:ring-2 focus:ring-orange-300 disabled:opacity-50"
         value={order.status}
         onChange={(e) =>
           onStatusChange(order.id, e.target.value as Order["status"])
@@ -32,23 +33,26 @@ const OrderActions = ({
         <option value="delivered">Delivered</option>
       </select>
 
-      <button
-        className="text-green-600 underline hover:text-green-800 transition text-sm disabled:opacity-50"
+      <Button
+        size="sm"
+        variant="outline"
         onClick={() => onEdit(order.id)}
         disabled={disabled}
+        className="border-orange-300 text-orange-700 hover:bg-orange-50"
         aria-label="Edit order"
       >
         Edit
-      </button>
+      </Button>
 
-      <button
-        className="text-red-500 underline hover:text-red-700 transition text-sm disabled:opacity-50"
+      <Button
+        size="sm"
+        variant="destructive"
         onClick={() => onDelete(order.id)}
         disabled={disabled}
         aria-label="Delete order"
       >
         Delete
-      </button>
+      </Button>
     </div>
   );
 };

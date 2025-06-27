@@ -1,14 +1,12 @@
-import { useUsers } from "../ManageUsers/hooks/useUsers";
-import UsersList from "../ManageUsers/UsersList";
+import React from 'react';
 
-export default function DriverManagement() {
-    const { users, ...rest } = useUsers();
-    const drivers = users.filter((u) => u.user_type === "driver");
+const DriverManagement: React.FC = () => {
+  return (
+    <div>
+      <h1>Driver Management</h1>
+      {/* Driver list / status / assignments */}
+    </div>
+  );
+};
 
-    return (
-        <div>
-            <h1 className="text-xl font-bold mb-4">Driver Management</h1>
-            <UsersList users={drivers} {...rest} />
-        </div>
-    );
-}
+export default DriverManagement;

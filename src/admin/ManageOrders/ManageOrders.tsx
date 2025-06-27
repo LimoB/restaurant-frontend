@@ -2,22 +2,20 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import OrderCreateModal from "../../components/orders/OrderCreateModal";
-import OrderEditModal from "../../components/orders/OrderEditModal";
-import OrderTable from "../../components/orders/OrderTable";
+import OrderEditModal from "./orders/OrderEditModal";
+import OrderTable from "./orders/OrderTable";
 import {
   fetchAllOrders,
   deleteOrder,
   updateOrder,
   fetchOrderById,
-} from "../../services/orders";
+} from "../../services/ordersServices";
 import type { Order } from "../../types/order";
 
 const ManageOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
-  const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
@@ -96,13 +94,6 @@ const ManageOrders = () => {
       <ToastContainer position="top-right" />
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-[#4a2d16]">Manage Orders</h2>
-        <button
-          onClick={() => setShowCreateModal(true)}
-          disabled={actionLoading}
-          className="bg-[#7b3e19] hover:bg-[#5a2c13] text-white px-4 py-2 rounded shadow disabled:opacity-50"
-        >
-          + Create Order
-        </button>
       </div>
 
       {loading ? (
@@ -118,13 +109,6 @@ const ManageOrders = () => {
           onEdit={handleEdit}
           expandedOrderId={expandedOrderId}
           actionLoading={actionLoading}
-        />
-      )}
-
-      {showCreateModal && (
-        <OrderCreateModal
-          onClose={() => setShowCreateModal(false)}
-          onOrderCreated={loadOrders}
         />
       )}
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import type { Order } from "../../types/order";
-import { fetchOrderById, updateOrder } from "../../services/orders";
+import type { Order } from "../../../types/order";
+import { fetchOrderById, updateOrder } from "../../../services/ordersServices";
 import { toast } from "react-toastify";
 
 interface Props {
@@ -116,8 +116,8 @@ const OrderEditModal = ({ orderId, onClose, onOrderUpdated }: Props) => {
                         onClick={handleSubmit}
                         disabled={submitting || rateLimited}
                         className={`px-4 py-2 text-white rounded ${submitting || rateLimited
-                                ? "bg-blue-400 cursor-not-allowed"
-                                : "bg-blue-600 hover:bg-blue-700"
+                            ? "bg-blue-400 cursor-not-allowed"
+                            : "bg-blue-600 hover:bg-blue-700"
                             }`}
                     >
                         {submitting ? "Saving..." : "Save"}

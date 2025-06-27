@@ -1,10 +1,35 @@
-import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import {
+  Outlet,
+  NavLink,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { LogOut, User, Settings, Utensils, ClipboardList, Users, Truck, MessageSquare, Layers, MapPin, Globe, Cog } from "lucide-react";
+import {
+  LogOut,
+  User,
+  Settings,
+  Utensils,
+  ClipboardList,
+  Users,
+  Truck,
+  MessageSquare,
+  Layers,
+  MapPin,
+  Globe,
+  Cog,
+} from "lucide-react";
 
 const links = [
   { label: "Orders", to: "/admin/orders", icon: <ClipboardList size={18} /> },
-  { label: "Restaurants", to: "/admin/restaurants", icon: <Utensils size={18} /> },
+  {
+    label: "Restaurants",
+    icon: <Utensils size={18} />,
+    sublinks: [
+      { label: "Manage Restaurants", to: "/admin/restaurants" },
+      { label: "Manage Owners", to: "/admin/restaurant-owners" },
+    ],
+  },
   { label: "Menu Items", to: "/admin/menu", icon: <Layers size={18} /> },
   { label: "Users", to: "/admin/users", icon: <Users size={18} /> },
   { label: "Drivers", to: "/admin/drivers", icon: <Truck size={18} /> },
@@ -17,8 +42,10 @@ const links = [
 
 const AdminLayout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -41,21 +68,62 @@ const AdminLayout = () => {
       <aside className="w-64 bg-white/70 backdrop-blur-lg text-[#1e1e1e] p-6 hidden md:flex flex-col gap-6 border-r border-gray-200 shadow-sm">
         <h2 className="text-2xl font-extrabold tracking-wide mb-2">Admin Panel</h2>
         <nav className="flex flex-col gap-1">
-          {links.map(({ label, to, icon }) => (
-            <NavLink
-              key={label}
-              to={to}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-2 rounded-xl text-sm font-medium transition ${
-                  isActive
-                    ? "bg-[#e8f0fe] text-blue-700"
-                    : "hover:bg-gray-100 text-gray-800"
-                }`
-              }
-            >
-              {icon} {label}
-            </NavLink>
-          ))}
+          {links.map(({ label, to, icon, sublinks }) => {
+            const isParentActive = sublinks?.some((s) => location.pathname.startsWith(s.to));
+            const isOpen = openMenus[label] || isParentActive;
+
+            if (!sublinks) {
+              return (
+                <NavLink
+                  key={label}
+                  to={to!}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-4 py-2 rounded-xl text-sm font-medium transition ${isActive ? "bg-[#e8f0fe] text-blue-700" : "hover:bg-gray-100 text-gray-800"
+                    }`
+                  }
+                >
+                  {icon} {label}
+                </NavLink>
+              );
+            }
+
+            return (
+              <div key={label} className="flex flex-col">
+                <button
+                  onClick={() =>
+                    setOpenMenus((prev) => ({
+                      ...prev,
+                      [label]: !prev[label],
+                    }))
+                  }
+                  className={`flex items-center gap-3 px-4 py-2 rounded-xl text-sm font-medium transition text-left w-full ${isParentActive ? "bg-[#e8f0fe] text-blue-700" : "hover:bg-gray-100 text-gray-800"
+                    }`}
+                >
+                  {icon} {label}
+                </button>
+
+                <div
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                    } ml-6 flex flex-col gap-1`}
+                >
+                  {sublinks.map((sublink) => (
+                    <NavLink
+                      key={sublink.label}
+                      to={sublink.to}
+                      className={({ isActive }) =>
+                        `px-3 py-1 text-sm rounded-md transition ${isActive
+                          ? "bg-[#e8f0fe] text-blue-700"
+                          : "hover:bg-gray-100 text-gray-700"
+                        }`
+                      }
+                    >
+                      {sublink.label}
+                    </NavLink>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </nav>
       </aside>
 

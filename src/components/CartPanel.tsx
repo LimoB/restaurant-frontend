@@ -1,6 +1,10 @@
+// components/CartPanel.tsx
 import { useEffect, useRef } from "react";
 import { useCart } from "../context/CartContext";
 import { X } from "lucide-react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import type { RootState } from "../store/store";
 
 const CartPanel = ({
   open,
@@ -14,6 +18,10 @@ const CartPanel = ({
   const { cart } = useCart();
   const panelRef = useRef<HTMLDivElement>(null);
   const total = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
+
+  const { user, token } = useSelector((state: RootState) => state.auth);
+  const isLoggedIn = Boolean(user && token);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const panel = panelRef.current;
@@ -35,9 +43,8 @@ const CartPanel = ({
   return (
     <div
       ref={panelRef}
-      className={`fixed top-0 right-0 w-full sm:w-80 h-full z-50 bg-gradient-to-br from-white via-blue-50 to-purple-100 shadow-2xl p-5 transition-transform duration-300 ease-in-out transform ${
-        open ? "translate-x-0" : "translate-x-full"
-      }`}
+      className={`fixed top-0 right-0 w-full sm:w-80 h-full z-50 bg-gradient-to-br from-white via-blue-50 to-purple-100 shadow-2xl p-5 transition-transform duration-300 ease-in-out transform ${open ? "translate-x-0" : "translate-x-full"
+        }`}
       aria-hidden={!open}
       role="dialog"
       aria-label="Shopping Cart Panel"
@@ -76,19 +83,20 @@ const CartPanel = ({
         )}
       </div>
 
-      {/* Divider */}
       <hr className="my-5 border-blue-100" />
 
-      {/* Total */}
       <div className="flex justify-between items-center text-base font-semibold text-indigo-800 mb-5">
         <span>Total:</span>
         <span>${total.toFixed(2)}</span>
       </div>
 
-      {/* Order Button */}
       <button
         onClick={() => {
           console.log("🧡 CartPanel Order Now clicked");
+          if (!isLoggedIn) {
+            localStorage.setItem("showConfirmModalAfterLogin", "true");
+            return navigate("/login");
+          }
           onOrderNowClick();
         }}
         className="w-full text-sm font-bold bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-full transition disabled:opacity-50 disabled:cursor-not-allowed"

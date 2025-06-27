@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import type { User } from "../admin/ManageUsers/types/user";
+import type { User } from "./types/user";
+import { Button } from "../../components/ui/button"; // adjust path if needed
 
 interface AddUserModalProps {
-  isEditing: boolean;
   formData: User;
   setFormData: React.Dispatch<React.SetStateAction<User>>;
   closeModal: () => void;
@@ -13,17 +13,12 @@ interface AddUserModalProps {
 const roleOptions = ["admin", "member", "driver", "owner"];
 
 const AddUserModal: React.FC<AddUserModalProps> = ({
-  isEditing,
   formData,
   setFormData,
   closeModal,
   fetchUsers,
 }) => {
   const [loading, setLoading] = useState(false);
-
-
-
-
 
   const handleSubmit = async () => {
     const token = localStorage.getItem("token");
@@ -32,37 +27,30 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
       return;
     }
 
-    const url = isEditing
-      ? `http://localhost:3000/api/users/${formData.id}`
-      : "http://localhost:3000/api/admin/create-user"; // ✅ your new backend route
-
-    const method = isEditing ? "PUT" : "POST";
-
-    const body = {
-      full_name: formData.name,
-      email: formData.email,
-      contact_phone: formData.contact_phone,
-      user_type: formData.user_type,
-      ...(isEditing ? {} : { password: formData.password }), // Only send password on creation
-    };
-
     try {
       setLoading(true);
-      const res = await fetch(url, {
-        method,
+
+      const res = await fetch("http://localhost:3000/api/admin/create-user", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify({
+          full_name: formData.name,
+          email: formData.email,
+          contact_phone: formData.contact_phone,
+          user_type: formData.user_type,
+          password: formData.password,
+        }),
       });
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.error || "Failed to save user");
+        throw new Error(errorData.error || "Failed to create user");
       }
 
-      toast.success(isEditing ? "User updated" : "User created 🎉");
+      toast.success("User created 🎉");
       closeModal();
       fetchUsers();
     } catch (err: any) {
@@ -72,12 +60,10 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
     }
   };
 
-
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded shadow-lg w-full max-w-md space-y-4">
-        <h2 className="text-xl font-bold">{isEditing ? "Edit User" : "Add User"}</h2>
+        <h2 className="text-xl font-bold">Add User</h2>
 
         <input
           type="text"
@@ -105,17 +91,15 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
           className="w-full px-3 py-2 border rounded"
         />
 
-        {!isEditing && (
-          <input
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-            className="w-full px-3 py-2 border rounded"
-          />
-        )}
+        <input
+          type="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={(e) =>
+            setFormData({ ...formData, password: e.target.value })
+          }
+          className="w-full px-3 py-2 border rounded"
+        />
 
         <select
           value={formData.user_type}
@@ -132,20 +116,22 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
         </select>
 
         <div className="flex justify-end gap-2 pt-2">
-          <button
+          <Button
             onClick={closeModal}
-            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+            variant="outline"
+            size="md"
             disabled={loading}
           >
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            variant="primary"
+            size="md"
             disabled={loading}
           >
-            {loading ? "Saving..." : isEditing ? "Update" : "Create"}
-          </button>
+            {loading ? "Saving..." : "Create"}
+          </Button>
         </div>
       </div>
     </div>

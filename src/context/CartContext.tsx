@@ -6,13 +6,7 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-};
+import type { Product } from "../types/product"; // ✅ Use shared Product type
 
 type CartItem = Product & { quantity: number };
 
@@ -26,6 +20,7 @@ type CartAction =
 type CartContextType = {
   cart: CartItem[];
   dispatch: React.Dispatch<CartAction>;
+  clearCart: () => void; // ✅ Add clearCart to the context type
 };
 
 const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
@@ -92,8 +87,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
+  const clearCart = () => {
+    dispatch({ type: "CLEAR" });
+  };
+
   return (
-    <CartContext.Provider value={{ cart, dispatch }}>
+    <CartContext.Provider value={{ cart, dispatch, clearCart }}>
       {children}
     </CartContext.Provider>
   );

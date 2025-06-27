@@ -1,10 +1,10 @@
 import axios from "axios";
 
 const client = axios.create({
-    baseURL: "http://localhost:3000/api", // adjust to production baseURL as needed
-    headers: {
-        "Content-Type": "application/json",
-    },
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
 });
+
+console.log("📡 Axios baseURL:", client.defaults.baseURL);
 
 export default client;

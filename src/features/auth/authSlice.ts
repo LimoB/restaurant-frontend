@@ -1,24 +1,27 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-// Define User interface based on backend response
+// ✅ Define User interface based on backend schema
 interface User {
-  userId: number;         // Ensure this matches your backend
+  id: number;              // Must match backend (not userId)
   name: string;
   email: string;
-  user_type: string;      // "admin", "owner", etc.
+  user_type: string;       // "admin", "owner", "driver", "member"
+  address_id: number;      // Required for order delivery
 }
 
-// Define the overall auth state
+// ✅ Define AuthState structure
 interface AuthState {
   token: string | null;
   user: User | null;
 }
 
+// ✅ Initial state
 const initialState: AuthState = {
   token: null,
   user: null,
 };
 
+// ✅ Create the slice
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -31,10 +34,10 @@ const authSlice = createSlice({
 
     // Called on logout
     logout() {
-      return initialState; // Clear state safely
+      return initialState;
     },
 
-    // Optional: useful if restoring from localStorage
+    // Restore from localStorage or external source
     setAuthState(state, action: PayloadAction<AuthState>) {
       state.token = action.payload.token;
       state.user = action.payload.user;
@@ -42,5 +45,6 @@ const authSlice = createSlice({
   },
 });
 
+// ✅ Export actions and reducer
 export const { loginSuccess, logout, setAuthState } = authSlice.actions;
 export default authSlice.reducer;
