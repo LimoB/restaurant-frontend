@@ -1,10 +1,11 @@
+// pages/Landing/ProductShowcase.tsx
 import { useState, useEffect } from "react";
 import { getMenuItems } from "../../services/menu";
 import type { Product } from "../../types/product";
 
 import { useCart } from "../../context/CartContext";
 import CartPanel from "../../components/CartPanel";
-import { ShoppingCart } from "lucide-react";
+import CartButton from "../../components/CartButton";
 
 type Props = {
   getQuantity: (id: string) => number;
@@ -20,8 +21,7 @@ const ProductShowcase = ({
   onOrderNowClick,
 }: Props) => {
   const [cartOpen, setCartOpen] = useState(false);
-  const { cart } = useCart();
-
+  useCart();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,12 +30,11 @@ const ProductShowcase = ({
       try {
         const data = await getMenuItems();
 
-        // ✅ Sanitize and normalize product structure
         const sanitizedData: Product[] = data.map((item: any) => ({
           id: String(item.id),
           name: item.name,
           price: Number(item.price),
-          image: item.image_url, // 👈 map backend field to `image`
+          image: item.image_url,
           ingredients: item.ingredients ?? "",
         }));
 
@@ -58,19 +57,8 @@ const ProductShowcase = ({
     closeCart();
   };
 
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-
   return (
     <>
-      {/* Floating Cart Button */}
-      <button
-        onClick={openCart}
-        className="fixed bottom-6 right-6 bg-orange-600 hover:bg-orange-700 text-white px-5 py-3 rounded-full shadow-xl z-50 flex items-center gap-2 text-base"
-      >
-        <ShoppingCart size={20} />
-        {totalItems === 0 ? "My Cart" : `${totalItems} item${totalItems > 1 ? "s" : ""}`}
-      </button>
-
       {/* Products Section */}
       <section className="px-4 py-12 md:px-16 relative">
         <div className="w-full md:w-4/5 mx-auto">
@@ -95,9 +83,9 @@ const ProductShowcase = ({
                       alt={product.name}
                       className="w-20 h-20 object-cover rounded-full shadow-md mb-3"
                       loading="lazy"
-                      onError={(e) =>
-                        (e.currentTarget.src = "/fallback.jpg")
-                      }
+                      onError={(e) => {
+                        e.currentTarget.src = "/fallback.jpg";
+                      }}
                     />
                     <h3 className="text-base font-semibold text-center text-gray-800">
                       {product.name}
@@ -127,10 +115,7 @@ const ProductShowcase = ({
                       </div>
                     ) : (
                       <button
-                        onClick={() => {
-                          addToCart(product);
-                          openCart();
-                        }}
+                        onClick={() => addToCart(product)}
                         className="bg-orange-500 hover:bg-orange-600 text-white text-sm px-4 py-2 rounded-full mt-2"
                       >
                         Add
@@ -149,6 +134,11 @@ const ProductShowcase = ({
           onClose={closeCart}
           onOrderNowClick={handleOrderNowClick}
         />
+
+        {/* Floating Cart Button */}
+        <div className="fixed bottom-6 right-6 z-50">
+          <CartButton onClick={openCart} />
+        </div>
       </section>
     </>
   );

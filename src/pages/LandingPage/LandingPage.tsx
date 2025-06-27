@@ -13,7 +13,6 @@ import ReservationSection from "./ReservationSection";
 import Footer from "./Footer";
 
 // Components
-import CartIcon from "../../components/CartIcon";
 import CartPanel from "../../components/CartPanel";
 import ConfirmModal from "../../components/ConfirmOrderModal";
 import type { Product } from "../../types/product";
@@ -55,10 +54,11 @@ const LandingPage = () => {
     [cart]
   );
 
+  // ✅ updated: no longer opens cart panel on "Add"
   const handleAddToCart = useCallback(
     (product: Product) => {
       addToCart(product);
-      setShowCartPanel(true);
+      // ❌ don't open the cart panel here
     },
     [addToCart]
   );
@@ -75,15 +75,13 @@ const LandingPage = () => {
 
   const handleCloseModal = useCallback(() => {
     console.log("🟥 ConfirmModal hidden");
-    setShowConfirmModal(false);
+    setShowConfirmModal(true);
   }, []);
 
-  // 🛠 Normalize cart to ensure all items include a `comment`
   const normalizedCart: CartItem[] = cart.map((item) => ({
     ...item,
-    comment: (item as any).comment ?? "", // ⚠️ Not ideal long-term
+    comment: (item as any).comment ?? "",
   }));
-
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -119,8 +117,6 @@ const LandingPage = () => {
         <Testimonials />
         <ReservationSection />
         <Footer />
-
-        <CartIcon onClick={() => setShowCartPanel(true)} />
 
         <CartPanel
           open={showCartPanel}

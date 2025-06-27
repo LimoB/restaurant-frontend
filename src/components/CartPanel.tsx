@@ -2,9 +2,6 @@
 import { useEffect, useRef } from "react";
 import { useCart } from "../context/CartContext";
 import { X } from "lucide-react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import type { RootState } from "../store/store";
 
 const CartPanel = ({
   open,
@@ -18,10 +15,6 @@ const CartPanel = ({
   const { cart } = useCart();
   const panelRef = useRef<HTMLDivElement>(null);
   const total = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
-
-  const { user, token } = useSelector((state: RootState) => state.auth);
-  const isLoggedIn = Boolean(user && token);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const panel = panelRef.current;
@@ -49,6 +42,9 @@ const CartPanel = ({
       role="dialog"
       aria-label="Shopping Cart Panel"
     >
+
+
+
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold text-indigo-700">Your Cart</h2>
@@ -60,6 +56,8 @@ const CartPanel = ({
           <X size={20} />
         </button>
       </div>
+
+
 
       {/* Cart Items */}
       <div className="space-y-4 overflow-y-auto max-h-[60vh] pr-1">
@@ -93,10 +91,6 @@ const CartPanel = ({
       <button
         onClick={() => {
           console.log("🧡 CartPanel Order Now clicked");
-          if (!isLoggedIn) {
-            localStorage.setItem("showConfirmModalAfterLogin", "true");
-            return navigate("/login");
-          }
           onOrderNowClick();
         }}
         className="w-full text-sm font-bold bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-full transition disabled:opacity-50 disabled:cursor-not-allowed"
