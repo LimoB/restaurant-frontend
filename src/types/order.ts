@@ -7,6 +7,8 @@ import type { OrderComment } from "./orderComment";
 import type { OrderStatus, OrderStatusEntry } from "./orderStatus";
 
 export interface Order {
+  expected_delivery: any;
+  delivery_time: any;
   id: number;
   driver_id: number | null;
 
