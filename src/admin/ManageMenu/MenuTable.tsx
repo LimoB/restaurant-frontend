@@ -21,6 +21,7 @@ export default function MenuTable({ items, onEdit, onDelete }: Props) {
                         <th>Name</th>
                         <th>Price</th>
                         <th>Ingredients</th>
+                        <th>Category</th> {/* ✅ NEW */}
                         <th>Restaurant</th>
                         <th>Actions</th>
                     </tr>
@@ -43,8 +44,9 @@ export default function MenuTable({ items, onEdit, onDelete }: Props) {
                                 )}
                             </td>
                             <td className="p-3">{item.name}</td>
-                            <td>${item.price.toFixed(2)}</td>
+                            <td>${Number(item.price).toFixed(2)}</td>
                             <td>{item.ingredients || "—"}</td>
+                            <td>{item.category?.name ?? "—"}</td> {/* ✅ Category name */}
                             <td>{item.restaurant?.name ?? "—"}</td>
                             <td className="space-x-2">
                                 <Button size="sm" variant="outline" onClick={() => onEdit(item)}>

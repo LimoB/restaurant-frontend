@@ -5,6 +5,8 @@ import {
   updateMenuItem,
   deleteMenuItem,
 } from "../../services/menu";
+import { fetchCategories } from "../../services/category";
+import { fetchRestaurants } from "../../services/restaurants";
 import toast from "react-hot-toast";
 
 export type MenuItem = {
@@ -13,8 +15,9 @@ export type MenuItem = {
   price: number;
   ingredients?: string;
   image_url?: string;
-  category?: { name: string };
-  restaurant?: { name: string };
+  active: boolean;
+  category?: { id: number; name: string };
+  restaurant?: { id: number; name: string };
 };
 
 export const useMenu = () => {
@@ -24,11 +27,17 @@ export const useMenu = () => {
   const [showFormModal, setShowFormModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
+  const [restaurants, setRestaurants] = useState<{ id: number; name: string }[]>([]);
+
   const [form, setForm] = useState({
     name: "",
     price: "",
     ingredients: "",
     image_url: "",
+    category_id: 0,
+    restaurant_id: 0,
+    active: true,
   });
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -36,14 +45,20 @@ export const useMenu = () => {
   const loadMenu = async () => {
     try {
       setLoading(true);
-      const data = await getMenuItems();
-      const normalized = data.map((item: any) => ({
+      const [menuData, categoryData, restaurantData] = await Promise.all([
+        getMenuItems(),
+        fetchCategories(),
+        fetchRestaurants(),
+      ]);
+      const normalized = menuData.map((item: any) => ({
         ...item,
         price: Number(item.price),
       }));
       setMenuItems(normalized);
+      setCategories(categoryData);
+      setRestaurants(restaurantData);
     } catch {
-      toast.error("Failed to load menu items.");
+      toast.error("Failed to load data.");
     } finally {
       setLoading(false);
     }
@@ -55,7 +70,15 @@ export const useMenu = () => {
 
   const openAdd = () => {
     setEditingItem(null);
-    setForm({ name: "", price: "", ingredients: "", image_url: "" });
+    setForm({
+      name: "",
+      price: "",
+      ingredients: "",
+      image_url: "",
+      category_id: categories[0]?.id || 0,
+      restaurant_id: restaurants[0]?.id || 0,
+      active: true,
+    });
     setShowFormModal(true);
   };
 
@@ -66,16 +89,17 @@ export const useMenu = () => {
       price: String(item.price),
       ingredients: item.ingredients ?? "",
       image_url: item.image_url ?? "",
+      category_id: item.category?.id || 0,
+      restaurant_id: item.restaurant?.id || 0,
+      active: item.active ?? true,
     });
     setShowFormModal(true);
   };
 
   const handleFormSubmit = async () => {
     const payload = {
-      name: form.name,
+      ...form,
       price: parseFloat(form.price),
-      ingredients: form.ingredients,
-      image_url: form.image_url,
     };
 
     try {
@@ -124,5 +148,7 @@ export const useMenu = () => {
     setDeletingId,
     handleFormSubmit,
     handleDelete,
+    categories,
+    restaurants,
   };
 };

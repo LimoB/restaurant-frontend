@@ -36,6 +36,7 @@ const ProductShowcase = ({
           price: Number(item.price),
           image: item.image_url,
           ingredients: item.ingredients ?? "",
+          restaurant: item.restaurant ?? undefined, // 🆕 include restaurant
         }));
 
         setProducts(sanitizedData);
@@ -72,6 +73,7 @@ const ProductShowcase = ({
             <div className="flex flex-wrap justify-center gap-6">
               {products.map((product) => {
                 const quantity = getQuantity(product.id);
+                const restaurantName = product.restaurant?.name ?? "Unknown";
 
                 return (
                   <div
@@ -90,6 +92,9 @@ const ProductShowcase = ({
                     <h3 className="text-base font-semibold text-center text-gray-800">
                       {product.name}
                     </h3>
+                    <p className="text-xs text-gray-500 text-center italic mb-1">
+                      {restaurantName}
+                    </p>
                     <p className="text-sm text-gray-500 text-center mb-2">
                       {product.ingredients?.slice(0, 32)}...
                     </p>
