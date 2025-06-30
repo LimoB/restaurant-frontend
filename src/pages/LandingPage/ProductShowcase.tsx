@@ -30,14 +30,17 @@ const ProductShowcase = ({
       try {
         const data = await getMenuItems();
 
+
         const sanitizedData: Product[] = data.map((item: any) => ({
           id: String(item.id),
           name: item.name,
-          price: Number(item.price),
+          price: String(item.price), // ✅ convert to string
           image: item.image_url,
           ingredients: item.ingredients ?? "",
-          restaurant: item.restaurant ?? undefined, // 🆕 include restaurant
+          restaurant: item.restaurant ?? undefined,
+          restaurant_id: item.restaurant_id ?? item.restaurant?.id ?? "",
         }));
+
 
         setProducts(sanitizedData);
       } catch (error) {

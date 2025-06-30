@@ -4,11 +4,13 @@ import client from "../api/client"; // ✅ Ensure this points to your axios/HTTP
 // ✅ Types
 export interface StateInput {
   name: string;
+  code: string;
 }
 
 export interface State {
   id: number;
   name: string;
+  code: string;
 }
 
 // ✅ Fetch all states

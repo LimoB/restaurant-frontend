@@ -10,6 +10,7 @@ import OffersSection from "./OffersSection";
 import ProductShowcase from "./ProductShowcase";
 import Testimonials from "./Testimonials";
 import ReservationSection from "./ReservationSection";
+import AboutSection from "./AboutSection"; // ✅ Import added
 import Footer from "./Footer";
 
 // Components
@@ -68,12 +69,10 @@ const LandingPage = () => {
       toast.error("🛒 Your cart is empty.");
       return;
     }
-    console.log("🧡 CartPanel Order Now clicked");
     setShowConfirmModal(true);
   }, [cart]);
 
   const handleCloseModal = useCallback(() => {
-    console.log("🟥 ConfirmModal hidden");
     setShowConfirmModal(false);
   }, []);
 
@@ -83,55 +82,45 @@ const LandingPage = () => {
   }));
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1950&q=80')",
-        }}
-      />
+    <>
+      <HeroSection />
+      <OffersSection />
 
-      {/* Semi-transparent Gradient Overlay */}
-      <div
-        className="absolute inset-0 z-10"
-        style={{ backgroundColor: "rgba(255, 255, 255, 0.75)" }}
-      />
-
-      {/* Main Content */}
-      <div className="relative z-20 flex flex-col min-h-screen backdrop-blur-sm">
-        <HeroSection />
-        <OffersSection />
-
-        <div id="menu-section">
-          <ProductShowcase
-            getQuantity={getQuantity}
-            addToCart={handleAddToCart}
-            decrement={decrement}
-            onOrderNowClick={handleOrderNowClick}
-          />
-        </div>
-
-        <Testimonials />
-        <ReservationSection />
-        <Footer />
-
-        <CartPanel
-          open={showCartPanel}
-          onClose={() => setShowCartPanel(false)}
+      <div id="menu-section">
+        <ProductShowcase
+          getQuantity={getQuantity}
+          addToCart={handleAddToCart}
+          decrement={decrement}
           onOrderNowClick={handleOrderNowClick}
         />
-
-        <ConfirmModal
-          show={showConfirmModal}
-          onClose={handleCloseModal}
-          product={null}
-          cart={normalizedCart}
-          total={total}
-        />
       </div>
-    </div>
+
+      <Testimonials />
+      <ReservationSection />
+
+     {/* ✅ About section with ID */}
+      <div id="about">
+        <AboutSection />
+      </div>
+
+      <div id="footer">
+        <Footer />
+      </div>
+
+      <CartPanel
+        open={showCartPanel}
+        onClose={() => setShowCartPanel(false)}
+        onOrderNowClick={handleOrderNowClick}
+      />
+
+      <ConfirmModal
+        show={showConfirmModal}
+        onClose={handleCloseModal}
+        product={null}
+        cart={normalizedCart}
+        total={total}
+      />
+    </>
   );
 };
 

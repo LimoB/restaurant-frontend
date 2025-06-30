@@ -6,27 +6,23 @@ import LoginPage from "../pages/LoginPage";
 import RequestResetPage from "../pages/RequestResetPage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import Unauthorized from "../pages/Unauthorized";
-import MenuPage from "../user/MenuPage"; // Make sure this path is correct
-import NotFound from "../components/NotFound"; // ✅ New reusable 404 component
+import MenuPage from "../user/MenuPage";
+import AboutPage from "../pages/AboutPage";
+import NotFound from "../components/NotFound";
 
 export const PublicRoutes = (
-  <>
-    <Route path="/" element={<Layout><LandingPage /></Layout>} />
-    <Route path="/register" element={<Layout><RegisterPage /></Layout>} />
-    <Route path="/login" element={<Layout><LoginPage /></Layout>} />
-    <Route path="/menu" element={<Layout><MenuPage /></Layout>} />
-    <Route path="/request-reset" element={<Layout><RequestResetPage /></Layout>} />
-    <Route path="/reset-password" element={<Layout><ResetPasswordPage /></Layout>} />
-    <Route path="/unauthorized" element={<Layout><Unauthorized /></Layout>} />
+  <Route element={<Layout />}>
+    <Route path="/" element={<LandingPage />} />
+    <Route path="/register" element={<RegisterPage />} />
+    <Route path="/login" element={<LoginPage />} />
+    <Route path="/menu" element={<MenuPage />} />
+    <Route path="/request-reset" element={<RequestResetPage />} />
+    <Route path="/reset-password" element={<ResetPasswordPage />} />
+    <Route path="/unauthorized" element={<Unauthorized />} />
 
-    {/* Reusable NotFound page */}
-    <Route
-      path="*"
-      element={
-        <Layout>
-          <NotFound />
-        </Layout>
-      }
-    />
-  </>
+    {/* ✅ No need to wrap AboutPage again */}
+    <Route path="/about" element={<AboutPage />} />
+
+    <Route path="*" element={<NotFound />} />
+  </Route>
 );

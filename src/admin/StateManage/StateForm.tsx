@@ -1,7 +1,7 @@
 import { Button } from "../../components/ui/button";
 
 type Props = {
-  form: { name: string };
+  form: { name: string; code: string };
   onChange: (field: string, value: any) => void;
   onSubmit: () => void;
   onCancel: () => void;
@@ -17,6 +17,7 @@ export default function StateForm({ form, onChange, onSubmit, onCancel, isEdit }
         onSubmit();
       }}
     >
+      {/* State Name */}
       <div className="flex flex-col gap-1">
         <label htmlFor="name" className="text-sm font-medium">
           State Name
@@ -26,6 +27,21 @@ export default function StateForm({ form, onChange, onSubmit, onCancel, isEdit }
           type="text"
           value={form.name}
           onChange={(e) => onChange("name", e.target.value)}
+          className="border rounded px-3 py-2"
+          required
+        />
+      </div>
+
+      {/* State Code */}
+      <div className="flex flex-col gap-1">
+        <label htmlFor="code" className="text-sm font-medium">
+          State Code
+        </label>
+        <input
+          id="code"
+          type="text"
+          value={form.code}
+          onChange={(e) => onChange("code", e.target.value)}
           className="border rounded px-3 py-2"
           required
         />
