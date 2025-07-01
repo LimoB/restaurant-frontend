@@ -93,6 +93,7 @@ export const createOrUpdateUser = async (
 };
 
 // ✅ 🔹 Update current user's profile settings & image (merged endpoint)
+// 🔹 Update current user's profile (merged settings & image)
 export const updateUserProfileSettings = async (
   userId: number,
   updates: {
@@ -100,28 +101,36 @@ export const updateUserProfileSettings = async (
     contact_phone?: string;
     password?: string;
     file?: File;
+    notification_preference?: string;
   }
-): Promise<string> => {
+): Promise<{ message: string; updated: any }> => {
   const formData = new FormData();
 
   if (updates.name) formData.append("name", updates.name);
   if (updates.contact_phone) formData.append("contact_phone", updates.contact_phone);
   if (updates.password) formData.append("password", updates.password);
+  if (updates.notification_preference)
+    formData.append("notification_preference", updates.notification_preference);
   if (updates.file) formData.append("file", updates.file);
 
-  const res = await fetch(`${API_URL}/users/${userId}/profile`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-    },
-    body: formData,
-  });
+  try {
+    const res = await fetch(`${API_URL}/users/${userId}/profile`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: formData,
+    });
 
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error || "Failed to update profile");
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Failed to update profile");
+    }
+
+    return { message: data.message, updated: data.updated };
+  } catch (err: any) {
+    console.error("❌ Profile update error:", err);
+    throw new Error(err.message || "Unexpected error during profile update");
   }
-
-  const data = await res.json();
-  return data.message;
 };

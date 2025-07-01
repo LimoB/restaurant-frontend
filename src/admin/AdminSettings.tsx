@@ -8,7 +8,7 @@ import toast, { Toaster } from "react-hot-toast";
 export default function AdminSettings() {
   const user = useAppSelector(
     (state) => state.auth.user
-  ) as BasicUser & { image_url?: string };
+  ) as BasicUser & { image_url?: string; notification_preference?: string };
 
   const [profileUrl, setProfileUrl] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -17,6 +17,9 @@ export default function AdminSettings() {
   const [phone, setPhone] = useState(user?.contact_phone || "");
   const [name, setName] = useState(user?.name || "");
   const [password, setPassword] = useState("");
+  const [notificationPreference, setNotificationPreference] = useState(
+    user?.notification_preference || "email"
+  );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -27,16 +30,18 @@ export default function AdminSettings() {
 
   const handleSaveSettings = async () => {
     if (!user?.id) return;
-
     setUploading(true);
+
     try {
-      await updateUserProfileSettings(user.id, {
+      const { message } = await updateUserProfileSettings(user.id, {
         name,
         contact_phone: phone,
         password: password.trim() !== "" ? password : undefined,
         file: file || undefined,
+        notification_preference: notificationPreference,
       });
-      toast.success("✅ Profile updated successfully!");
+
+      toast.success(message || "✅ Profile updated!");
     } catch (err: any) {
       console.error("❌ Error updating profile:", err);
       toast.error(err?.message || "Failed to update profile.");
@@ -67,7 +72,9 @@ export default function AdminSettings() {
                 className="w-full px-4 py-2 border rounded-md bg-white dark:bg-slate-700 dark:text-white dark:border-slate-600"
               />
               {uploading && (
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Uploading...</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  Uploading...
+                </p>
               )}
               {(profileUrl || user?.image_url) && (
                 <img
@@ -133,7 +140,46 @@ export default function AdminSettings() {
               />
             </div>
 
-            {/* Save Settings */}
+            {/* 🔔 Notification Preferences */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Notification Preference
+              </label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                  <input
+                    type="radio"
+                    name="notification"
+                    value="email"
+                    checked={notificationPreference === "email"}
+                    onChange={() => setNotificationPreference("email")}
+                  />
+                  Email
+                </label>
+                <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                  <input
+                    type="radio"
+                    name="notification"
+                    value="sms"
+                    checked={notificationPreference === "sms"}
+                    onChange={() => setNotificationPreference("sms")}
+                  />
+                  SMS
+                </label>
+                <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                  <input
+                    type="radio"
+                    name="notification"
+                    value="none"
+                    checked={notificationPreference === "none"}
+                    onChange={() => setNotificationPreference("none")}
+                  />
+                  None
+                </label>
+              </div>
+            </div>
+
+            {/* Save Button */}
             <div className="text-center">
               <Button type="button" disabled={uploading} onClick={handleSaveSettings}>
                 {uploading ? "Saving..." : "Save Settings"}
