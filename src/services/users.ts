@@ -1,4 +1,4 @@
-import { store } from "../store/store"; // adjust if needed
+import { store } from "../store/store";
 
 export interface User {
   id: number;
@@ -12,7 +12,6 @@ export interface User {
 
 const API_URL = "http://localhost:3000/api";
 
-// ✅ Get token from Redux
 const getToken = () => store.getState().auth.token || "";
 
 // 🔹 GET all users
@@ -54,7 +53,7 @@ export const updateUserRole = async (id: number, user_type: string) => {
   if (!res.ok) throw new Error("Failed to update role");
 };
 
-// 🔹 Create or update user
+// 🔹 Create or update user (for admin create or edit)
 export const createOrUpdateUser = async (
   user: User,
   isEditing: boolean
@@ -93,15 +92,24 @@ export const createOrUpdateUser = async (
   }
 };
 
-// ✅ NEW: Upload user profile image
-export const uploadProfileImage = async (
+// ✅ 🔹 Update current user's profile settings & image (merged endpoint)
+export const updateUserProfileSettings = async (
   userId: number,
-  file: File
+  updates: {
+    name?: string;
+    contact_phone?: string;
+    password?: string;
+    file?: File;
+  }
 ): Promise<string> => {
   const formData = new FormData();
-  formData.append("file", file);
 
-  const res = await fetch(`${API_URL}/users/${userId}/profile-image`, {
+  if (updates.name) formData.append("name", updates.name);
+  if (updates.contact_phone) formData.append("contact_phone", updates.contact_phone);
+  if (updates.password) formData.append("password", updates.password);
+  if (updates.file) formData.append("file", updates.file);
+
+  const res = await fetch(`${API_URL}/users/${userId}/profile`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${getToken()}`,
@@ -110,10 +118,10 @@ export const uploadProfileImage = async (
   });
 
   if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error.error || "Failed to upload profile image");
+    const err = await res.json();
+    throw new Error(err.error || "Failed to update profile");
   }
 
   const data = await res.json();
-  return data.imageUrl; // ✅ cloudinary-secure URL returned
+  return data.message;
 };
