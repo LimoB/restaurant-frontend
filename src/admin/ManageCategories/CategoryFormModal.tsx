@@ -24,7 +24,9 @@ const CategoryFormModal = ({ open, initialData, onCancel, onSave }: Props) => {
     }
   }, [initialData]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -43,15 +45,17 @@ const CategoryFormModal = ({ open, initialData, onCancel, onSave }: Props) => {
           value={formData.name}
           onChange={handleChange}
           required
-          className="w-full border rounded px-3 py-2 text-sm"
+          className="w-full border rounded px-3 py-2 text-sm bg-white text-gray-900 dark:bg-slate-800 dark:text-white dark:border-slate-600"
         />
+
         <textarea
           name="description"
           placeholder="Description (optional)"
           value={formData.description}
           onChange={handleChange}
-          className="w-full border rounded px-3 py-2 text-sm"
+          className="w-full border rounded px-3 py-2 text-sm bg-white text-gray-900 dark:bg-slate-800 dark:text-white dark:border-slate-600"
         />
+
         <div className="flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel

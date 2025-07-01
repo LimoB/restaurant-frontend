@@ -1,5 +1,4 @@
-// services/user.ts
-import { store } from "../store/store"; // update path as needed
+import { store } from "../store/store"; // adjust if needed
 
 export interface User {
   id: number;
@@ -13,9 +12,10 @@ export interface User {
 
 const API_URL = "http://localhost:3000/api";
 
-// ✅ Get token from Redux, not localStorage
+// ✅ Get token from Redux
 const getToken = () => store.getState().auth.token || "";
 
+// 🔹 GET all users
 export const fetchAllUsers = async (): Promise<User[]> => {
   const res = await fetch(`${API_URL}/users`, {
     headers: { Authorization: `Bearer ${getToken()}` },
@@ -30,6 +30,7 @@ export const fetchAllUsers = async (): Promise<User[]> => {
   }));
 };
 
+// 🔹 DELETE a user
 export const deleteUser = async (id: number) => {
   const res = await fetch(`${API_URL}/users/${id}`, {
     method: "DELETE",
@@ -39,6 +40,7 @@ export const deleteUser = async (id: number) => {
   if (!res.ok) throw new Error("Failed to delete user");
 };
 
+// 🔹 Update role only
 export const updateUserRole = async (id: number, user_type: string) => {
   const res = await fetch(`${API_URL}/users/${id}`, {
     method: "PUT",
@@ -52,6 +54,7 @@ export const updateUserRole = async (id: number, user_type: string) => {
   if (!res.ok) throw new Error("Failed to update role");
 };
 
+// 🔹 Create or update user
 export const createOrUpdateUser = async (
   user: User,
   isEditing: boolean
@@ -88,4 +91,29 @@ export const createOrUpdateUser = async (
     const data = await res.json();
     throw new Error(data.error || "Failed to save user");
   }
+};
+
+// ✅ NEW: Upload user profile image
+export const uploadProfileImage = async (
+  userId: number,
+  file: File
+): Promise<string> => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await fetch(`${API_URL}/users/${userId}/profile-image`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || "Failed to upload profile image");
+  }
+
+  const data = await res.json();
+  return data.imageUrl; // ✅ cloudinary-secure URL returned
 };

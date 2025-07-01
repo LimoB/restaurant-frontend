@@ -23,18 +23,21 @@ export default function ManageMenu() {
     handleFormSubmit,
     handleDelete,
     categories,
-    restaurants, // ✅ fetched from backend
+    restaurants,
   } = useMenu();
 
   return (
-    <div className="p-6 space-y-6" ref={scrollRef}>
+    <div
+      className="p-6 space-y-6 min-h-screen bg-gray-50 text-gray-800 dark:bg-slate-900 dark:text-gray-100"
+      ref={scrollRef}
+    >
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Manage Menu</h1>
         <Button onClick={openAdd}>➕ Add Menu Item</Button>
       </div>
 
       {loading ? (
-        <p className="text-gray-600">Loading menu items...</p>
+        <p className="text-gray-500 dark:text-gray-400">Loading menu items...</p>
       ) : (
         <MenuTable
           items={menuItems}
@@ -57,8 +60,8 @@ export default function ManageMenu() {
           onCancel={() => setShowFormModal(false)}
           onSubmit={handleFormSubmit}
           onChange={(field, value) => setForm((prev) => ({ ...prev, [field]: value }))}
-          categories={categories} // ✅ pass categories
-          restaurants={restaurants} // ✅ pass restaurants
+          categories={categories}
+          restaurants={restaurants}
         />
       </Modal>
 

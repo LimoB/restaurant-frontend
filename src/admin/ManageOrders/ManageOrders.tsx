@@ -28,7 +28,7 @@ const ManageOrders = () => {
     try {
       const response = await fetchAllOrders();
       if (Array.isArray(response)) {
-        setOrders(response); // ✅ Fix: use only the array of orders
+        setOrders(response);
       } else {
         throw new Error("Invalid response format");
       }
@@ -44,7 +44,6 @@ const ManageOrders = () => {
     setActionLoading(true);
     try {
       await deleteOrder(id);
-      // toast.success("🗑️ Order deleted successfully!");
       await loadOrders();
     } catch {
       toast.error("❌ Failed to delete the order");
@@ -103,16 +102,19 @@ const ManageOrders = () => {
   );
 
   return (
-    <div className="p-6 bg-white shadow rounded-xl relative z-10">
-      <ToastContainer position="top-right" />
+    <div className="p-6 bg-white dark:bg-slate-900 text-[#1e1e1e] dark:text-white shadow rounded-xl relative z-10">
+      <ToastContainer position="top-right" theme="dark" />
+      
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-[#4a2d16]">Manage Orders</h2>
+        <h2 className="text-2xl font-bold text-[#4a2d16] dark:text-orange-300">
+          Manage Orders
+        </h2>
       </div>
 
       {loading ? (
-        <p className="text-gray-500">Loading orders...</p>
+        <p className="text-gray-500 dark:text-gray-400">Loading orders...</p>
       ) : orders.length === 0 ? (
-        <p className="text-gray-400 italic">No orders found.</p>
+        <p className="text-gray-400 dark:text-gray-500 italic">No orders found.</p>
       ) : (
         <>
           <OrderTable
@@ -125,17 +127,16 @@ const ManageOrders = () => {
             actionLoading={actionLoading}
           />
 
-          {/* Pagination controls */}
           {totalPages > 1 && (
             <div className="flex justify-center mt-4 gap-2 text-sm">
               {Array.from({ length: totalPages }, (_, i) => (
                 <button
                   key={i}
                   onClick={() => setPage(i + 1)}
-                  className={`px-3 py-1 rounded ${
+                  className={`px-3 py-1 rounded transition ${
                     page === i + 1
                       ? "bg-blue-600 text-white"
-                      : "bg-gray-200 text-gray-700"
+                      : "bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-gray-200"
                   }`}
                 >
                   {i + 1}

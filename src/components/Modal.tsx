@@ -15,16 +15,20 @@ export default function Modal({ isOpen, show, title, onClose, children }: Props)
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg w-full max-w-md relative">
+      <div className="bg-white dark:bg-slate-900 dark:text-gray-100 p-6 rounded-lg w-full max-w-md relative shadow-xl">
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-gray-500 hover:text-black"
+          className="absolute top-2 right-2 text-gray-500 hover:text-black dark:hover:text-white dark:text-gray-400"
           aria-label="Close modal"
         >
           ✕
         </button>
 
-        {title && <h2 className="text-xl font-semibold mb-4">{title}</h2>}
+        {title && (
+          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+            {title}
+          </h2>
+        )}
 
         {children}
       </div>

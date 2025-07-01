@@ -24,12 +24,10 @@ const ManageCategories = () => {
   const load = async () => {
     try {
       const data = await fetchCategories();
-      console.log("✅ Loaded categories from API:", data); // Debug log
       setCategories(data);
       setFiltered(data);
     } catch (err) {
       toast.error("Failed to fetch categories");
-      console.error("❌ Error loading categories:", err);
     }
   };
 
@@ -80,7 +78,7 @@ const ManageCategories = () => {
   const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-6 text-gray-800 dark:text-gray-100">
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-bold">📂 Manage Categories</h1>
         <Button
@@ -100,7 +98,7 @@ const ManageCategories = () => {
         placeholder="Search by name or description..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full border px-3 py-2 rounded text-sm"
+        className="w-full border px-3 py-2 rounded text-sm bg-white text-gray-900 dark:bg-slate-800 dark:text-white dark:border-slate-600"
       />
 
       <CategoryFormModal
@@ -111,10 +109,10 @@ const ManageCategories = () => {
       />
 
       {pageData.length === 0 ? (
-        <p className="text-gray-500 italic mt-6">No categories found.</p>
+        <p className="text-gray-500 italic mt-6 dark:text-gray-400">No categories found.</p>
       ) : (
-        <table className="w-full table-auto border mt-4 text-sm">
-          <thead className="bg-gray-100">
+        <table className="w-full table-auto border mt-4 text-sm border-gray-200 dark:border-slate-700">
+          <thead className="bg-gray-100 dark:bg-slate-800">
             <tr>
               <th className="p-2 text-left">ID</th>
               <th className="p-2 text-left">Name</th>
@@ -123,39 +121,36 @@ const ManageCategories = () => {
             </tr>
           </thead>
           <tbody>
-            {pageData.map((cat) => {
-              console.log(`🔍 Rendering category ${cat.id}:`, cat); // Debug each row
-              return (
-                <tr key={cat.id} className="border-t hover:bg-gray-50">
-                  <td className="p-2">{cat.id}</td>
-                  <td className="p-2">{cat.name}</td>
-                  <td className="p-2">
-                    {typeof cat.description === "string" && cat.description.trim()
-                      ? cat.description
-                      : <em className="text-gray-400">No description</em>}
-                  </td>
-                  <td className="p-2 space-x-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        setSelected(cat);
-                        setFormOpen(true);
-                      }}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => handleDelete(cat.id)}
-                    >
-                      Delete
-                    </Button>
-                  </td>
-                </tr>
-              );
-            })}
+            {pageData.map((cat) => (
+              <tr key={cat.id} className="border-t hover:bg-gray-50 dark:hover:bg-slate-700 dark:border-slate-700">
+                <td className="p-2">{cat.id}</td>
+                <td className="p-2">{cat.name}</td>
+                <td className="p-2">
+                  {typeof cat.description === "string" && cat.description.trim()
+                    ? cat.description
+                    : <em className="text-gray-400 dark:text-gray-500">No description</em>}
+                </td>
+                <td className="p-2 space-x-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setSelected(cat);
+                      setFormOpen(true);
+                    }}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => handleDelete(cat.id)}
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       )}
@@ -169,7 +164,7 @@ const ManageCategories = () => {
               className={`px-3 py-1 rounded ${
                 page === i + 1
                   ? "bg-blue-600 text-white"
-                  : "bg-gray-200 text-gray-700"
+                  : "bg-gray-200 text-gray-700 dark:bg-slate-700 dark:text-gray-100"
               }`}
             >
               {i + 1}

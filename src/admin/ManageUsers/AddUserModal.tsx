@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import type { User } from "./types/user";
-import { Button } from "../../components/ui/button"; // adjust path if needed
+import { Button } from "../../components/ui/button";
 
 interface AddUserModalProps {
   formData: User;
@@ -61,8 +61,8 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded shadow-lg w-full max-w-md space-y-4">
+    <div className="fixed inset-0 bg-black bg-opacity-40 dark:bg-opacity-60 flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 p-6 rounded shadow-lg w-full max-w-md space-y-4 border dark:border-slate-700">
         <h2 className="text-xl font-bold">Add User</h2>
 
         <input
@@ -70,7 +70,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
           placeholder="Name"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="w-full px-3 py-2 border rounded"
+          className="w-full px-3 py-2 border rounded bg-white dark:bg-slate-800 dark:border-slate-600 dark:text-white"
         />
 
         <input
@@ -78,7 +78,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
           placeholder="Email"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          className="w-full px-3 py-2 border rounded"
+          className="w-full px-3 py-2 border rounded bg-white dark:bg-slate-800 dark:border-slate-600 dark:text-white"
         />
 
         <input
@@ -88,7 +88,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
           onChange={(e) =>
             setFormData({ ...formData, contact_phone: e.target.value })
           }
-          className="w-full px-3 py-2 border rounded"
+          className="w-full px-3 py-2 border rounded bg-white dark:bg-slate-800 dark:border-slate-600 dark:text-white"
         />
 
         <input
@@ -98,7 +98,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
           onChange={(e) =>
             setFormData({ ...formData, password: e.target.value })
           }
-          className="w-full px-3 py-2 border rounded"
+          className="w-full px-3 py-2 border rounded bg-white dark:bg-slate-800 dark:border-slate-600 dark:text-white"
         />
 
         <select
@@ -106,7 +106,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
           onChange={(e) =>
             setFormData({ ...formData, user_type: e.target.value })
           }
-          className="w-full px-3 py-2 border rounded"
+          className="w-full px-3 py-2 border rounded bg-white dark:bg-slate-800 dark:border-slate-600 dark:text-white"
         >
           {roleOptions.map((role) => (
             <option key={role} value={role}>

@@ -19,7 +19,7 @@ const OrderActions = ({
   return (
     <div className="flex items-center gap-3 flex-wrap">
       <select
-        className="text-sm px-2 py-1 rounded-md border border-gray-300 shadow-sm bg-white focus:ring-2 focus:ring-orange-300 disabled:opacity-50"
+        className="text-sm px-2 py-1 rounded-md border border-gray-300 dark:border-slate-600 shadow-sm bg-white dark:bg-slate-900 text-gray-800 dark:text-white focus:ring-2 focus:ring-orange-300 disabled:opacity-50"
         value={order.status}
         onChange={(e) =>
           onStatusChange(order.id, e.target.value as Order["status"])
@@ -38,7 +38,7 @@ const OrderActions = ({
         variant="outline"
         onClick={() => onEdit(order.id)}
         disabled={disabled}
-        className="border-orange-300 text-orange-700 hover:bg-orange-50"
+        className="border-orange-300 text-orange-700 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900"
         aria-label="Edit order"
       >
         Edit
@@ -49,6 +49,7 @@ const OrderActions = ({
         variant="destructive"
         onClick={() => onDelete(order.id)}
         disabled={disabled}
+        className="dark:bg-red-700 dark:hover:bg-red-800 dark:text-white"
         aria-label="Delete order"
       >
         Delete

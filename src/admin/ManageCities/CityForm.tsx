@@ -9,7 +9,14 @@ type Props = {
   states: { id: number; name: string }[];
 };
 
-export default function CityForm({ form, onChange, onSubmit, onCancel, isEdit, states }: Props) {
+export default function CityForm({
+  form,
+  onChange,
+  onSubmit,
+  onCancel,
+  isEdit,
+  states,
+}: Props) {
   return (
     <form
       className="space-y-4"
@@ -19,7 +26,7 @@ export default function CityForm({ form, onChange, onSubmit, onCancel, isEdit, s
       }}
     >
       <div className="flex flex-col gap-1">
-        <label htmlFor="name" className="text-sm font-medium">
+        <label htmlFor="name" className="text-sm font-medium text-gray-800 dark:text-gray-100">
           City Name
         </label>
         <input
@@ -27,20 +34,20 @@ export default function CityForm({ form, onChange, onSubmit, onCancel, isEdit, s
           type="text"
           value={form.name}
           onChange={(e) => onChange("name", e.target.value)}
-          className="border rounded px-3 py-2"
+          className="border rounded px-3 py-2 bg-white text-gray-800 dark:bg-slate-800 dark:text-white dark:border-slate-600"
           required
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="state" className="text-sm font-medium">
+        <label htmlFor="state" className="text-sm font-medium text-gray-800 dark:text-gray-100">
           State
         </label>
         <select
           id="state"
           value={form.state_id}
           onChange={(e) => onChange("state_id", parseInt(e.target.value))}
-          className="border rounded px-3 py-2"
+          className="border rounded px-3 py-2 bg-white text-gray-800 dark:bg-slate-800 dark:text-white dark:border-slate-600"
         >
           {states.map((s) => (
             <option key={s.id} value={s.id}>

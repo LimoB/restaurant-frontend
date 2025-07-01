@@ -71,17 +71,19 @@ const DriverFormModal = ({
 
   return (
     <Modal show={open} onClose={onClose} title="Add New Driver">
-      {error && <p className="text-red-500 mb-3">{error}</p>}
+      {error && <p className="text-red-500 dark:text-red-400 mb-3">{error}</p>}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 text-gray-800 dark:text-gray-100">
         {/* 🔹 User Select */}
         <div>
-          <label className="block mb-1 font-medium text-sm">Select User</label>
+          <label className="block mb-1 font-medium text-sm dark:text-gray-200">
+            Select User
+          </label>
           <select
             name="user_id"
             value={formData.user_id ?? ""}
             onChange={handleChange}
-            className="w-full border rounded px-3 py-2 text-sm"
+            className="w-full border rounded px-3 py-2 text-sm bg-white dark:bg-slate-800 dark:border-gray-700 dark:text-gray-100"
             required
           >
             <option value="" disabled>
@@ -102,7 +104,7 @@ const DriverFormModal = ({
           placeholder="e.g. Toyota"
           value={formData.car_make}
           onChange={handleChange}
-          className="w-full border rounded px-3 py-2 text-sm"
+          className="w-full border rounded px-3 py-2 text-sm bg-white dark:bg-slate-800 dark:border-gray-700 dark:text-gray-100"
         />
 
         {/* 🔹 Car Model */}
@@ -112,7 +114,7 @@ const DriverFormModal = ({
           placeholder="e.g. Forester"
           value={formData.car_model}
           onChange={handleChange}
-          className="w-full border rounded px-3 py-2 text-sm"
+          className="w-full border rounded px-3 py-2 text-sm bg-white dark:bg-slate-800 dark:border-gray-700 dark:text-gray-100"
         />
 
         {/* 🔹 Car Year */}
@@ -123,7 +125,7 @@ const DriverFormModal = ({
           value={formData.car_year}
           onChange={handleChange}
           maxLength={4}
-          className="w-full border rounded px-3 py-2 text-sm"
+          className="w-full border rounded px-3 py-2 text-sm bg-white dark:bg-slate-800 dark:border-gray-700 dark:text-gray-100"
         />
 
         {/* 🔹 License Plate */}
@@ -133,7 +135,7 @@ const DriverFormModal = ({
           placeholder="e.g. KDA 123X"
           value={formData.license_plate}
           onChange={handleChange}
-          className="w-full border rounded px-3 py-2 text-sm"
+          className="w-full border rounded px-3 py-2 text-sm bg-white dark:bg-slate-800 dark:border-gray-700 dark:text-gray-100"
         />
 
         {/* 🔹 Submit Button */}

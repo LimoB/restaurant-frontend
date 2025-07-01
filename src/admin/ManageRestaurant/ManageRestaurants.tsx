@@ -1,9 +1,8 @@
-// src/admin/ManageRestaurants.tsx
 import { useRestaurants } from "./useRestaurants";
 import RestaurantTable from "./RestaurantTable";
 import RestaurantForm from "./RestaurantForm";
 import Modal from "../../components/Modal";
-import { Button } from "../../components/ui/button"; // Import your Button component
+import { Button } from "../../components/ui/button";
 
 export default function ManageRestaurants() {
   const {
@@ -23,7 +22,7 @@ export default function ManageRestaurants() {
   } = useRestaurants();
 
   return (
-    <div className="min-h-screen p-6 bg-gray-100">
+    <div className="min-h-screen p-6 bg-gray-100 dark:bg-slate-900 text-gray-800 dark:text-gray-100">
       <h1 className="text-2xl font-bold mb-4">Manage Restaurants</h1>
 
       <div className="flex items-center gap-4 mb-4">
@@ -36,7 +35,7 @@ export default function ManageRestaurants() {
           onChange={(e) =>
             setSelectedCity(e.target.value === "all" ? "all" : Number(e.target.value))
           }
-          className="px-3 py-2 border rounded"
+          className="px-3 py-2 border border-gray-300 dark:border-slate-600 rounded bg-white dark:bg-slate-800 text-gray-800 dark:text-white"
         >
           <option value="all">All Cities</option>
           {cities.map((c) => (

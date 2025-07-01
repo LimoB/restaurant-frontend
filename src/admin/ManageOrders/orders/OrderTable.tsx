@@ -29,9 +29,9 @@ const OrderTable = ({
     : [];
 
   return (
-    <div className="overflow-auto shadow rounded-md max-h-[800px]">
-      <table className="w-full table-auto text-sm border divide-y bg-white">
-        <thead className="bg-gray-50 text-left">
+    <div className="overflow-auto shadow rounded-md max-h-[800px] border border-gray-200 dark:border-slate-700">
+      <table className="w-full table-auto text-sm border-collapse bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-200">
+        <thead className="bg-gray-50 dark:bg-slate-800 text-left">
           <tr>
             <th className="p-3">#</th>
             <th>User</th>
@@ -68,16 +68,14 @@ const OrderTable = ({
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.25 }}
-                      className="bg-gray-50"
+                      className="bg-gray-50 dark:bg-slate-800"
                     >
-                      <td colSpan={11} className="p-4 border border-t-0 text-gray-700">
+                      <td colSpan={11} className="p-4 border border-t-0 dark:border-slate-700 text-gray-700 dark:text-gray-300">
                         <div className="space-y-4 text-sm">
-
-                          {/* Items Ordered */}
                           {Array.isArray(order.orderMenuItems) && order.orderMenuItems.length > 0 && (
                             <div>
-                              <strong className="text-gray-800">Items Ordered:</strong>
-                              <ul className="list-disc pl-5 mt-1 text-gray-600">
+                              <strong className="text-gray-800 dark:text-gray-200">Items Ordered:</strong>
+                              <ul className="list-disc pl-5 mt-1 text-gray-600 dark:text-gray-300">
                                 {order.orderMenuItems.map((item) => (
                                   <li key={item.id}>
                                     {item.menu_item?.name ?? "Unknown"} (x{item.quantity}) – ${item.price}
@@ -91,14 +89,13 @@ const OrderTable = ({
                             </div>
                           )}
 
-                          {/* User Comments */}
                           <div>
-                            <strong className="text-gray-800">User Comments:</strong>
+                            <strong className="text-gray-800 dark:text-gray-200">User Comments:</strong>
                             {Array.isArray(order.comments) && order.comments.length > 0 ? (
-                              <ul className="list-disc pl-5 mt-1 text-gray-600">
+                              <ul className="list-disc pl-5 mt-1 text-gray-600 dark:text-gray-300">
                                 {order.comments.map((comment) => (
                                   <li key={comment.id}>
-                                    <span className="font-medium text-gray-800">
+                                    <span className="font-medium text-gray-800 dark:text-gray-200">
                                       {comment.user?.name ?? "Unknown"}:
                                     </span>{" "}
                                     “{comment.comment_text}” ({comment.comment_type}, ⭐{comment.rating ?? "–"})
@@ -106,15 +103,14 @@ const OrderTable = ({
                                 ))}
                               </ul>
                             ) : (
-                              <p className="text-gray-500 italic">No comments</p>
+                              <p className="text-gray-500 dark:text-gray-400 italic">No comments</p>
                             )}
                           </div>
 
-                          {/* Status History */}
                           <div>
-                            <strong className="text-gray-800">Status History:</strong>
+                            <strong className="text-gray-800 dark:text-gray-200">Status History:</strong>
                             {Array.isArray(order.statuses) && order.statuses.length > 0 ? (
-                              <ul className="list-disc pl-5 mt-1 text-gray-600">
+                              <ul className="list-disc pl-5 mt-1 text-gray-600 dark:text-gray-300">
                                 {order.statuses.map((status) => (
                                   <li key={status.id}>
                                     {status.statusCatalog?.name ?? "Unknown"} —{" "}
@@ -125,15 +121,14 @@ const OrderTable = ({
                                 ))}
                               </ul>
                             ) : (
-                              <p className="text-gray-500 italic">No status history</p>
+                              <p className="text-gray-500 dark:text-gray-400 italic">No status history</p>
                             )}
                           </div>
 
-                          {/* Driver Info */}
                           {order.driver && (
                             <div>
-                              <strong className="text-gray-800">Driver Car Info:</strong>
-                              <ul className="list-disc pl-5 mt-1 text-gray-600">
+                              <strong className="text-gray-800 dark:text-gray-200">Driver Car Info:</strong>
+                              <ul className="list-disc pl-5 mt-1 text-gray-600 dark:text-gray-300">
                                 {order.driver.car_make && <li>Make: {order.driver.car_make}</li>}
                                 {order.driver.car_model && <li>Model: {order.driver.car_model}</li>}
                                 {order.driver.car_year && <li>Year: {order.driver.car_year}</li>}
@@ -142,24 +137,24 @@ const OrderTable = ({
                                   !order.driver.car_model &&
                                   !order.driver.car_year &&
                                   !order.driver.license_plate && (
-                                    <li className="italic text-gray-500">No car information available</li>
+                                    <li className="italic text-gray-500 dark:text-gray-400">
+                                      No car information available
+                                    </li>
                                   )}
                               </ul>
                             </div>
                           )}
 
-                          {/* Admin Comment */}
                           {order.comment && (
                             <div>
-                              <strong className="text-gray-800">Admin Comment:</strong>{" "}
-                              <span className="italic text-gray-600">{order.comment}</span>
+                              <strong className="text-gray-800 dark:text-gray-200">Admin Comment:</strong>{" "}
+                              <span className="italic text-gray-600 dark:text-gray-300">{order.comment}</span>
                             </div>
                           )}
 
-                          {/* Actual Delivery */}
                           {order.actual_delivery_time && (
                             <div>
-                              <strong className="text-gray-800">Actual Delivery:</strong>{" "}
+                              <strong className="text-gray-800 dark:text-gray-200">Actual Delivery:</strong>{" "}
                               {new Date(order.actual_delivery_time).toLocaleString()}
                             </div>
                           )}
@@ -172,7 +167,10 @@ const OrderTable = ({
             ))
           ) : (
             <tr>
-              <td colSpan={11} className="text-center p-4 italic text-gray-500">
+              <td
+                colSpan={11}
+                className="text-center p-4 italic text-gray-500 dark:text-gray-400"
+              >
                 No orders to display or invalid data format.
               </td>
             </tr>

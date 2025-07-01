@@ -27,14 +27,14 @@ export default function ManageCities() {
   } = useCities();
 
   return (
-    <div className="p-6 space-y-6" ref={scrollRef}>
+    <div className="p-6 space-y-6 min-h-screen bg-gray-100 dark:bg-slate-900" ref={scrollRef}>
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Manage Cities</h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Manage Cities</h1>
         <Button onClick={openAdd}>+ Add City</Button>
       </div>
 
       {loading ? (
-        <p className="text-gray-600">Loading cities...</p>
+        <p className="text-gray-600 dark:text-gray-300">Loading cities...</p>
       ) : (
         <CityTable
           items={cities}
