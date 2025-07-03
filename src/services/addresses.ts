@@ -1,4 +1,4 @@
-import { store } from "../store/store";
+import { store } from "@/store/store";
 
 // ✅ Use Vite-specific env variable prefix
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";

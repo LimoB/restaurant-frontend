@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { useDispatch } from "react-redux";
-import { loginUser } from "../services/auth";
-import { loginSuccess } from "../features/auth/authSlice";
+import { loginUser } from "@/services/auth";
+import { loginSuccess } from "@/features/auth/authSlice";
 
 function LoginPage() {
   const dispatch = useDispatch();

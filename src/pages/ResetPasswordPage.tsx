@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { resetPassword } from "../services/auth";
+import { resetPassword } from "@/services/auth";
 import { Eye, EyeOff } from "lucide-react";
 
 function ResetPasswordPage() {
@@ -31,13 +31,13 @@ function ResetPasswordPage() {
 
   const handleReset = async () => {
     if (newPassword.length < 6) {
-      setError("❌ Password must be at least 6 characters.");
+      setError("Password must be at least 6 characters.");
       setMessage("");
       return;
     }
 
     if (!passwordsMatch) {
-      setError("❌ Passwords do not match.");
+      setError("Passwords do not match.");
       setMessage("");
       return;
     }
@@ -45,11 +45,11 @@ function ResetPasswordPage() {
     try {
       setLoading(true);
       const res = await resetPassword({ token, newPassword });
-      setMessage(res.data.message || "✅ Password reset successful.");
+      setMessage(res.data.message || "Password reset successful.");
       setError("");
       setTimeout(() => navigate("/login"), 2000);
     } catch (err: any) {
-      setError(err.response?.data?.error || "❌ Password reset failed.");
+      setError(err.response?.data?.error || "Password reset failed.");
       setMessage("");
     } finally {
       setLoading(false);
@@ -147,7 +147,7 @@ function ResetPasswordPage() {
         </div>
 
         {!passwordsMatch && confirmPassword && (
-          <p className="text-sm text-red-500">❌ Passwords do not match</p>
+          <p className="text-sm text-red-500">Passwords do not match</p>
         )}
 
         <button

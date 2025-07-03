@@ -1,8 +1,8 @@
 import { useState } from "react";
-import CartButton from "./CartButton";
-import CartPanel from "./CartPanel";
-import ConfirmModal from "./ConfirmModal/ConfirmModal";
-import { useCart } from "../context/CartContext";
+import CartButton from "@/components/CartButton";
+import CartPanel from "@/components/CartPanel";
+import ConfirmModal from "@/components/ConfirmModal/ConfirmModal";
+import { useCart } from "@/context/CartContext";
 
 const FloatingCartHandler = () => {
   const [cartOpen, setCartOpen] = useState(false);

@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { MenuItem } from "../types/menu";
+import type { MenuItem } from "@/types/menu";
 
 const API_URL = "http://localhost:3000/api";
 

@@ -1,6 +1,6 @@
 // components/CartPanel.tsx
 import { useEffect, useRef } from "react";
-import { useCart } from "../context/CartContext";
+import { useCart } from "@/context/CartContext";
 import { X } from "lucide-react";
 
 const CartPanel = ({

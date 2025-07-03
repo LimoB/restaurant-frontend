@@ -1,9 +1,9 @@
 import { Route, Navigate } from "react-router-dom";
-import RequireRole from "../components/RequireRole";
-import DriverLayout from "../driver/DriverLayout";
-import DriverDashboard from "../driver/DriverDashboard";
-import DriverDeliveries from "../driver/DriverDeliveries";
-import DriverMap from "../driver/DriverMap";
+import RequireRole from "@/components/RequireRole";
+import DriverLayout from "@/features/driver/DriverLayout";
+import DriverDashboard from "@/features/driver/DriverDashboard";
+import DriverDeliveries from "@/features/driver/DriverDeliveries";
+import DriverMap from "@/features/driver/DriverMap";
 
 export const DriverRoutes = (
   <Route element={<RequireRole allowedRoles={["driver"]} />}>

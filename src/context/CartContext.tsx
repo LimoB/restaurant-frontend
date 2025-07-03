@@ -6,7 +6,7 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-import type { Product } from "../types/product";
+import type { Product } from "@/types/product";
 
 // ✅ Extend Product for cart with necessary fields
 export type CartItem = Omit<Product, "price"> & {

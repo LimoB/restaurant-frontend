@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { FaUtensils } from "react-icons/fa";
 import { HiMenu, HiX } from "react-icons/hi";
-import CartButton from "../components/CartButton";
-import CartPanel from "../components/CartPanel";
-import ConfirmModal from "../components/ConfirmModal/ConfirmModal";
-import { useCart } from "../context/CartContext";
+import CartButton from "@/components/CartButton";
+import CartPanel from "@/components/CartPanel";
+import ConfirmModal from "@/components/ConfirmModal/ConfirmModal";
+import { useCart } from "@/context/CartContext";
 
 const PublicLayout = () => {
   const { pathname } = useLocation();

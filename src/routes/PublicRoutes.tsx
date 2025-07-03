@@ -1,12 +1,12 @@
 import { Route } from "react-router-dom";
-import Layout from "../components/PublicLayout";
+import Layout from "@/components/PublicLayout";
 import LandingPage from "../pages/LandingPage/LandingPage";
 import RegisterPage from "../pages/RegisterPage";
 import LoginPage from "../pages/LoginPage";
 import RequestResetPage from "../pages/RequestResetPage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import Unauthorized from "../pages/Unauthorized";
-import MenuPage from "../user/MenuPage";
+import MenuPage from "@/features/user/MenuPage";
 import AboutPage from "../pages/AboutPage";
 import NotFound from "../components/NotFound";
 

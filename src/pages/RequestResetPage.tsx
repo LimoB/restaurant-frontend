@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { requestPasswordReset } from "../services/auth";
+import { requestPasswordReset } from "@/services/auth";
 
 function RequestResetPage() {
   const [email, setEmail] = useState("");
@@ -18,10 +18,10 @@ function RequestResetPage() {
     try {
       setLoading(true);
       const res = await requestPasswordReset(email);
-      setMessage(res.data.message || "✅ Reset code sent to your email.");
+      setMessage(res.data.message || "Reset code sent to your email.");
       setError("");
     } catch (err: any) {
-      setError(err.response?.data?.error || "❌ Failed to request password reset.");
+      setError(err.response?.data?.error || "Failed to request password reset.");
       setMessage("");
     } finally {
       setLoading(false);

@@ -1,11 +1,11 @@
 // pages/Landing/ProductShowcase.tsx
 import { useState, useEffect } from "react";
-import { getMenuItems } from "../../services/menu";
-import type { Product } from "../../types/product";
+import { getMenuItems } from "@/services/menu";
+import type { Product } from "@/types/product";
 
-import { useCart } from "../../context/CartContext";
-import CartPanel from "../../components/CartPanel";
-import CartButton from "../../components/CartButton";
+import { useCart } from "@/context/CartContext";
+import CartPanel from "@/components/CartPanel";
+import CartButton from "@/components/CartButton";
 
 type Props = {
   getQuantity: (id: string) => number;

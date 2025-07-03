@@ -2,6 +2,7 @@
 import type { BasicUser } from "./user";
 
 export interface Driver {
+  name: string;
   id: number;                 // Unique driver ID
   user_id: number;           // Foreign key to users table
 

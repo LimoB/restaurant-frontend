@@ -1,5 +1,5 @@
-import { store } from "../store/store";
-import type { BasicUser } from "../types/user";
+import { store } from "@/store/store";
+import type { BasicUser } from "@/types/user";
 
 const API_URL = "http://localhost:3000/api";
 

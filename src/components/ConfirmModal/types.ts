@@ -1,6 +1,6 @@
 // components/ConfirmModal/types.ts
 
-import type { CartItem } from "../../types/cart";
+import type { CartItem } from "@/types/cart";
 
 export interface ConfirmModalProps {
   show: boolean;

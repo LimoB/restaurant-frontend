@@ -1,10 +1,10 @@
 // src/routes/OwnerRoutes.tsx
 import { Route, Navigate } from "react-router-dom";
-import RequireRole from "../components/RequireRole";
-import OwnerLayout from "../owner/OwnerLayout";
-import OwnerDashboard from "../owner/OwnerDashboard";
-import OwnerMyRestaurants from "../owner/OwnerMyRestaurants";
-import OwnerMenuPage from "../owner/OwnerMenuPage";
+import RequireRole from "@/components/RequireRole";
+import OwnerLayout from "@/features/owner/OwnerLayout";
+import OwnerDashboard from "@/features/owner/OwnerDashboard";
+import OwnerMyRestaurants from "@/features/owner/OwnerMyRestaurants";
+import OwnerMenuPage from "@/features/owner/OwnerMenuPage";
 
 export const OwnerRoutes = (
   <Route element={<RequireRole allowedRoles={["owner"]} />}>

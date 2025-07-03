@@ -1,3 +1,4 @@
+
 // components/ConfirmModal/ProductPrompt.tsx
 type Props = {
   product: { name: string };

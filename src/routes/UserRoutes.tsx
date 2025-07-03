@@ -1,9 +1,9 @@
 import { Route } from "react-router-dom";
 import RequireRole from "../components/RequireRole";
-import UserLayout from "../user/UserLayout";
-import UserDashboard from "../user/UserDashboard";
-import MenuPage from "../user/MenuPage";
-import MyOrders from "../user/MyOrders"; // Assuming MyOrders should be a separate page
+import UserLayout from "@/features/user/UserLayout";
+import UserDashboard from "@/features/user/UserDashboard";
+import MenuPage from "@/features/user/MenuPage";
+import MyOrders from "@/features/user/MyOrders"; // Assuming MyOrders should be a separate page
 
 export const UserRoutes = (
   <Route element={<RequireRole allowedRoles={["member"]} />}>

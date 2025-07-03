@@ -15,6 +15,7 @@ import ProductPrompt from "./ProductPrompt";
 import type { RootState } from "../../store/store";
 import type { CartItem } from "../../types/cart";
 import type { OrderInput } from "../../types/order";
+// import React = require("react");
 
 type ConfirmModalProps = {
   show: boolean;

@@ -14,10 +14,10 @@ import AboutSection from "./AboutSection"; // ✅ Import added
 import Footer from "./Footer";
 
 // Components
-import CartPanel from "../../components/CartPanel";
-import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
-import type { Product } from "../../types/product";
-import type { CartItem } from "../../types/cart";
+import CartPanel from "@/components/CartPanel";
+import ConfirmModal from "@/components/ConfirmModal/ConfirmModal";
+import type { Product } from "@/types/product";
+import type { CartItem } from "@/types/cart";
 
 interface RootState {
   auth: {

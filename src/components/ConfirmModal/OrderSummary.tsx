@@ -1,5 +1,5 @@
 // components/ConfirmModal/OrderSummary.tsx
-import type { CartItem } from "../../types/cart";
+import type { CartItem } from "@/types/cart";
 
 const OrderSummary = ({ cart, total }: { cart: CartItem[]; total: number }) => (
     <div className="rounded-xl border border-blue-200 bg-white p-4 text-sm text-left max-h-48 overflow-y-auto shadow-inner">

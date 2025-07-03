@@ -3,7 +3,7 @@ import { Loader } from "lucide-react";
 import { Link } from "react-router-dom";
 import OrderSummary from "./OrderSummary";
 
-import type { CartItem } from "../../types/cart";
+import type { CartItem } from "@/types/cart";
 
 type Props = {
   cart: CartItem[];

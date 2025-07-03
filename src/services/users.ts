@@ -1,4 +1,4 @@
-import { store } from "../store/store";
+import { store } from "@/store/store";
 
 export interface User {
   id: number;

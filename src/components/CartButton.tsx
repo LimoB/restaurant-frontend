@@ -1,5 +1,5 @@
 import { ShoppingCart } from "lucide-react";
-import { useCart } from "../context/CartContext";
+import { useCart } from "@/context/CartContext";
 
 type CartButtonProps = {
   onClick: () => void;

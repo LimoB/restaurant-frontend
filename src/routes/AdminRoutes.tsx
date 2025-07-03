@@ -1,19 +1,19 @@
 import { Route } from "react-router-dom";
-import RequireRole from "../components/RequireRole";
-import AdminLayout from "../admin/AdminLayout";
-import AdminDashboard from "../admin/AdminDashboard";
-import ManageUsers from "../admin/ManageUsers/ManageUsers";
-import ManageRestaurants from "../admin/ManageRestaurant/ManageRestaurants";
-import ManageOwners from "../admin/ManageRestaurant/ManageOwners";
-import ManageOrders from "../admin/ManageOrders/ManageOrders";
-import AdminSettings from "../admin/AdminSettings";
-import DriverManagement from "../admin/ManageDrivers/DriverManagement";
-// import DriverForm from "../admin/ManageDrivers/DriverForm"; // ✅ New import
-import ManageComments from "../admin/ManageComments/ManageComments";
-import ManageMenu from "../admin/ManageMenu/ManageMenu";
-import ManageCategories from "../admin/ManageCategories/ManageCategories";
-import StateManage from "../admin/StateManage/ManageStates";
-import ManageCities from "../admin/ManageCities/ManageCities";
+import RequireRole from "@/components/RequireRole";
+import AdminLayout from "@/features/admin/AdminLayout";
+import AdminDashboard from "@/features/admin/AdminDashboard";
+import ManageUsers from "@/features/admin/ManageUsers/ManageUsers";
+import ManageRestaurants from "@/features/admin/ManageRestaurant/ManageRestaurants";
+import ManageOwners from "@/features/admin/ManageRestaurant/ManageOwners";
+import ManageOrders from "@/features/admin/ManageOrders/ManageOrders";
+import AdminSettings from "@/features/admin/AdminSettings";
+import DriverManagement from "@/features/admin/ManageDrivers/DriverManagement";
+// import DriverForm from "../admin/ManageDrivers/DriverForm"; // New import
+import ManageComments from "@/features/admin/ManageComments/ManageComments";
+import ManageMenu from "@/features/admin/ManageMenu/ManageMenu";
+import ManageCategories from "@/features/admin/ManageCategories/ManageCategories";
+import StateManage from "@/features/admin/StateManage/ManageStates";
+import ManageCities from "@/features/admin/ManageCities/ManageCities";
 
 export const AdminRoutes = (
   <Route element={<RequireRole allowedRoles={["admin"]} />}>

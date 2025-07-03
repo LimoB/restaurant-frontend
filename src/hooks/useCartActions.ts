@@ -1,6 +1,6 @@
-import { useCart } from "../context/CartContext";
+import { useCart } from "@/context/CartContext";
 import toast from "react-hot-toast";
-import type { Product } from "../types/product";
+import type { Product } from "@/types/product";
 
 
 export const useCartActions = () => {

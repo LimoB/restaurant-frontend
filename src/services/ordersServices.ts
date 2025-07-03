@@ -1,6 +1,6 @@
-import client from "../api/client";
+import client from "@/api/client";
 import { toast } from "react-toastify";
-import type { Order, OrderInput } from "../types/order";
+import type { Order, OrderInput } from "@/types/order";
 import type { AxiosError } from "axios";
 
 // ✅ Graceful error handler

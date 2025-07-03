@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { registerUser, verifyEmail } from "../services/auth";
+import { registerUser, verifyEmail } from "@/services/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 

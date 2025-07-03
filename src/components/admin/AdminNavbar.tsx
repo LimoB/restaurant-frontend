@@ -8,7 +8,8 @@ import {
     Settings,
 } from "lucide-react";
 
-import LogoutButton from "../LogoutButton"; // ✅ Make sure the path is correct
+import LogoutButton from "@/components/LogoutButton"; // ✅ Make sure the path is correct
+// import React = require("react");
 
 interface Props {
     toggleTheme: () => void;

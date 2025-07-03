@@ -1,8 +1,8 @@
 // src/hooks/useTokenAutoLogout.ts
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "./hooks";
-import { logout } from "../features/auth/authSlice";
-import { isTokenExpired } from "../utils/checkTokenExpiry";
+import { logout } from "@/features/auth/authSlice";
+import { isTokenExpired } from "@/utils/checkTokenExpiry";
 
 export function useTokenAutoLogout() {
   const dispatch = useAppDispatch();

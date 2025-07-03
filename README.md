@@ -1,54 +1,73 @@
-# React + TypeScript + Vite
+# Restaurant Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, role-based restaurant management frontend application built with React and TypeScript. This project supports multiple user roles including Admin, Owner, Driver, and User with tailored interfaces and functionalities for each.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Table of Contents
 
-## Expanding the ESLint configuration
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Available Scripts](#available-scripts)
+- [Contributing](#contributing)
+- [License](#license)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Project Overview
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+This frontend application provides a rich, interactive UI for managing a restaurant platform. Users have different roles with specific capabilities:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Admin**: Manage categories, cities, users, orders, restaurants, states, and statuses.
+- **Owner**: Manage their restaurants and menus.
+- **Driver**: Manage deliveries and view routes.
+- **User**: Browse menus, place orders, and track orders.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+The app is built with scalability and maintainability in mind, using feature-based folder structure, TypeScript, and React hooks.
+
+---
+
+## Features
+
+- Role-based access and routing
+- Dynamic menu browsing and ordering
+- Order management dashboard for admins and owners
+- Driver delivery tracking with maps integration
+- Responsive and accessible UI components
+- Authentication and authorization handling
+- State management with Redux (or your chosen store)
+- API services abstracted for clean data fetching
+
+---
+
+## Tech Stack
+
+- React 18+ with TypeScript
+- Vite as build tool
+- Redux Toolkit for state management
+- React Router for navigation
+- CSS Modules / Tailwind CSS (adjust based on your setup)
+- REST API integration (backend separate)
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js v18+
+- pnpm or npm package manager
+
+### Installation
+
+```bash
+# Clone repo
+git clone https://github.com/LimoB/restaurant-frontend.git
+cd restaurant-frontend
+
+# Install dependencies
+pnpm install
 ```

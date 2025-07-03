@@ -1,5 +1,5 @@
 // services/state.ts
-import client from "../api/client"; // ✅ Ensure this points to your axios/HTTP client
+import client from "@/api/client"; // Ensure this points to your axios/HTTP client
 
 // ✅ Types
 export interface StateInput {

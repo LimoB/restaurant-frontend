@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { LogOut } from "lucide-react";
-import { logout } from "../features/auth/authSlice"; // ✅ Adjust the import path as needed
+import { logout } from "@/features/auth/authSlice"; // ✅ Adjust the import path as needed
 
 const LogoutButton = () => {
     const navigate = useNavigate();
